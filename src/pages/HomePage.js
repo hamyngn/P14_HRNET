@@ -4,6 +4,7 @@ import SelectCustom from "../components/SelectCustom"
 import { useDispatch } from "react-redux";
 import { save } from "../redux/actions/actions";
 import { Link } from "react-router-dom";
+import states from '../data'
 
 const HomePage = () => {
     const [firstName, setFirstName] = useState(null)
@@ -81,7 +82,7 @@ return (
                     />
 
                     <label htmlFor="state">State</label>
-                    <SelectCustom onChange={(event) => setState(event.target.value)} />
+                    <SelectCustom labelFor="state" data={states} onChange={(event) => setState(event.target.value)} />
 
                     <label htmlFor="zip-code">Zip Code</label>
                     <input 
