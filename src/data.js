@@ -237,4 +237,8 @@ const states = [
     }
 ];
 
+const department = [
+    
+]
+
 export default states;

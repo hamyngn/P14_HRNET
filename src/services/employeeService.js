@@ -13,7 +13,6 @@ const saveEmployee = (firstName, lastName, dateOfBirth, startDate, street, city,
         department: department
     }
     employees.push(employee);
-    console.log(employees)
 }
 
 const exportedObject = {

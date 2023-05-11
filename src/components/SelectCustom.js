@@ -1,42 +1,77 @@
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 import styles from '../assets/styles/SelectCustom.module.css'
+import {ReactComponent as SelectIcon} from '../assets/images/caret-down-solid.svg';
 
-const SelectCustom = ({labelFor, data}) => {
+const SelectCustom = ({labelFor, data, value, text}) => {
 
     const [showList, setShowList] = useState(false)
+    const [selectText, setSelectText] = useState(data[0][text])
+    const ref = useRef();
 
-    const options = data.map((state, index) =>
-        <option value={state.abbreviation} key={index}>{state.name}</option>
-    )
-
-    const handleClick = (value) => {
-        document.getElementById(labelFor).value = value;
-        setShowList(!showList);
+    const selectElement = document.getElementById(labelFor)
+    
+    const handleClick = (value, text) => {
+        selectElement.value = value;
+        setSelectText(text)
+        setShowList(false);
+        ref.current.classList.remove(`${styles.uiCornerTop}`) 
     }
 
-    const list = data.map((state, index) =>
-    <li 
-        onClick={() => handleClick(state.abbreviation)} 
-        key={index}
-    >
-        {state.name}
-    </li>
+    const options = data.map((data, index) =>
+        <option value={data[value]} key={index}>{data[text]}</option>
+    )
+
+    const list = data.map((data, index) =>
+        <li 
+            onClick={() => handleClick(data[value], data[text])} 
+            key={index}
+        >
+            {data[text]}
+        </li>
     )
 
     const handleShowList = () => {
-        setShowList(!showList);
+        ref.current.classList.add(`${styles.uiCornerTop}`)
+        setShowList(!showList)
+        if(showList) {
+            ref.current.classList.remove(`${styles.uiCornerTop}`) 
+        }
+    }
+
+    const buttonFocus = () => {
+        ref.current.focus();
     }
 
     return (
         <>
         <div className={styles.container}>
-        <select name={labelFor} id={labelFor} onClick={() => handleShowList()}>
+        <label htmlFor={`${labelFor}-button`} onClick={() => buttonFocus()}>State</label>
+        <select name={labelFor} id={labelFor} style={{display:"none"}}>
             {options}
         </select>
-        <div className={styles.list} style={showList? { display: 'block' } : {display: 'none'}}>
-        <ul>
-            {list}
-        </ul>
+        <div className={styles.list}>
+            <span 
+            id={`${labelFor}-button`} 
+            className={styles.selectMenuButton} 
+            onClick={() => handleShowList()} 
+            ref={ref}
+            tabIndex={0}
+            aria-expanded = "false"
+			aria-autocomplete = "list"
+			aria-owns = "selectMenuMenu"
+			aria-haspopup = "true"
+            >
+                <span className={styles.selectMenuText}>{selectText}</span>
+                <span className={styles.selectMenuIcon}><SelectIcon className={styles.selectIcon}/></span>
+            </span>
+            { showList &&
+            <div className={styles.dropDownMenu}>
+            <ul style={showList? {display: "block"}: {display: "none"}} className={styles.selectMenuMenu}>
+                {list}
+            </ul>
+            </div>
+            }
+            
         </div>
         </div>
         </>

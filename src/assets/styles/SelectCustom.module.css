@@ -1,8 +1,11 @@
 .container {
-    width: 14em;
     position: relative;
+    height: 60px;
+    width: 18em;
 }
-select {
+
+.selectMenuButton {
+    display: flex;
     font-family: Arial,Helvetica,sans-serif;
     background-color: #f6f6f6;
     font-size: 1em;
@@ -12,28 +15,41 @@ select {
     color: #454545;
     border: 1px solid #c5c5c5;
     padding: 0.4em 1em;
-    display: inline-block;
     line-height: normal;
     margin-right: 0.1em;
     cursor: pointer;
     vertical-align: middle;
     overflow: visible;
+    text-align: left;
+    white-space: nowrap;
+    align-items: center;
+    justify-content: space-between;
 }
 
-select:active {
+.selectMenuButton:active {
     border: 1px solid #003eff;
     background: #007fff;
     font-weight: normal;
     color: #ffffff;
 }
 
-option {
-    display: none;
+.selectMenuText {
+    display: block;
+    margin-right: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
+
+.uiCornerTop {
+    border-radius: 0;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+  }
 
 .list {
     position: absolute;
-    top: 40px; 
+    top: 35px; 
     left: 0px;
     z-index: 100;
     background-color: #ffffff;
@@ -42,11 +58,25 @@ option {
     width: 14em
 }
 
+.selectMenuMenu {
+    border: 1px solid #c5c5c5;
+    width: 14.7em;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    background-color: #ffffff;
+}
+
 ul {
     list-style-type: none;
+    padding: 10px;
     margin: 0;
 }
 
 ul li:hover {
     background-color: #007fff;
+}
+
+.selectMenuIcon, .selectIcon {
+    width: 16px;
+    height: 16px;
 }

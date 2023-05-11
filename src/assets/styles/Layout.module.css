@@ -1,0 +1,32 @@
+.flexRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 80vw;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    width: 100px;
+    height: auto;
+}
+
+a {
+    text-decoration: none;
+}
+
+.nav {
+    color: #708238;
+    margin-right: '20px'
+}
+
+.footer {
+display: flex;
+align-items: center;
+justify-content: center;
+}
