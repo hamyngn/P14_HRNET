@@ -4,7 +4,7 @@ import SelectCustom from "../components/SelectCustom"
 import { useDispatch } from "react-redux";
 import { save } from "../redux/actions/actions";
 import states from '../data'
-import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -21,7 +21,7 @@ const HomePage = () => {
     const [city, setCity] = useState(null)
     const [zipCode, setZipCode] = useState(null)
     const [department, setDepartment] = useState(null)
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
@@ -54,8 +54,8 @@ const HomePage = () => {
       };
 
 return (
-    <>
-        <div className={styles.container}>
+    <div className={styles.container}>
+        <div className={styles.flexColumn}>
             <h2>Create Employee</h2>
             <form action="#" id="create-employee">
                 <label htmlFor="first-name">First Name</label>
@@ -73,27 +73,27 @@ return (
                 onChange={(event) => setLastName(event.target.value)}
                 />
 
+                <p className={styles.datePickerLabel}>Date of birth</p>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={['DatePicker']}>
-                <DemoItem label="Date of Birth">
                     <DatePicker 
                     views={['year', 'month', 'day']}
                     onChange={(newValue) => setDateOfBirth(convertDate(newValue.$d.toDateString()))}
                     format="DD/MM/YYYY"/>
-                </DemoItem>
                 </DemoContainer>
                 </LocalizationProvider>
 
+                <p className={styles.datePickerLabel}>Start date</p>
+                <div id="datePicker">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={['DatePicker']}>
-                <DemoItem label="Start Date">
                     <DatePicker 
                     views={['year', 'month', 'day']}
                     onChange={(newValue) => setStartDate(convertDate(newValue.$d.toDateString()))}
                     format="DD/MM/YYYY"/>
-                </DemoItem>
                 </DemoContainer>
                 </LocalizationProvider>
+                </div>
 
                 <fieldset className={styles.address}>
                     <legend>Address</legend>
@@ -103,7 +103,7 @@ return (
                     id="street" 
                     type="text"
                     required
-                    onChange={(event) => setStreet(event.target.value)} 
+                    onChange={(event) => setStreet(event.target.value)}
                     />
 
                     <label htmlFor="city">City</label>
@@ -111,7 +111,7 @@ return (
                     id="city" 
                     type="text" 
                     required
-                    onChange={(event) => setCity(event.target.value)} 
+                    onChange={(event) => setCity(event.target.value)}
                     />
 
                     <SelectCustom labelFor="state" data={states} value="abbreviation" text="name"/>
@@ -121,7 +121,7 @@ return (
                     id="zip-code" 
                     type="number"
                     required
-                    onChange={(event) => setZipCode(event.target.value)} 
+                    onChange={(event) => setZipCode(event.target.value)}
                     />
                 </fieldset>
 
@@ -139,22 +139,20 @@ return (
                     <option>Legal</option>
                 </select>
             </form>
-            </div>
-            <div className={styles.center}>
             <button onClick={saveEmployee} style={{marginTop:5}}>Save</button>
             </div>
             <Modal
             open={open}
             onClose={handleClose}
             aria-describedby="modal-modal-description"
-        >
+            >
             <Box sx={style}>
             <Typography id="modal-modal-description">
             Employee Created!
             </Typography>
             </Box>
             </Modal>
-    </>
+    </div>
 )
 }
 

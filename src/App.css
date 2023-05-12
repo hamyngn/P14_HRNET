@@ -4,7 +4,14 @@ label {
   margin-bottom: 10px;
 }
 
-body {
-  margin-left: 10vw;
-  margin-right: 10vw;
+@media (max-width: 1300px) {
+  .css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root {
+    width: 430px;
+  }
+}
+
+@media (max-width: 575px) {
+  .css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root {
+    width: 270px;
+  }
 }

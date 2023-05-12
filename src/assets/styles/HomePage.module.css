@@ -1,16 +1,61 @@
 .container {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-.address {
-    margin-top: 10px;
-}
-
-.center {
+.flexColumn {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
+    width: 800px;
 }
 
+.address {
+    margin: 1rem 0 0 -0.75rem;
+    width: 100%;
+    border: 1px solid #000a00;
+}
+
+label {
+    font-weight: 500;
+    margin: 10px 0;
+}
+
+.datePickerLabel {
+    font-weight: 500;
+    margin: 10px 0 2px 0;
+}
+
+.datePickerBox {
+    width: 100%
+}
+
+input {
+    border: 1px solid #ccc; 
+    padding: 16.5px 14px;
+    border-radius: 4px;
+}
+
+input[type="text"], input[type="number"] {
+    width: 400px;
+    font-size: 1rem;
+}
+
+@media (max-width: 575px) {
+    h2 {
+        font-size: 1.2rem;
+    }
+
+    label, .datePickerLabel {
+        font-size: 0.86rem;
+    }
+
+    input[type="text"], input[type="number"] {
+    font-size: 0.8rem;
+    width: 250px;
+    padding: 10px;
+    border-radius: 4px;
+    }
+}

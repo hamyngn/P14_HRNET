@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import styles from '../assets/styles/Layout.module.css'
-import logo from '../assets/images/logo.jpg'
+import logo from '../assets/images/logo.png'
 
 const Layout = () => {
     return (
@@ -9,9 +9,9 @@ const Layout = () => {
         <header className={styles.flexRow}>
         <div className={styles.title}>
             <img src={logo} alt="Logo" className={styles.logo}/>
-            <h1 style={{color: '#708238'}}>HRnet</h1>
+            <h1 style={{color: '#4F5A26'}}>HRnet</h1>
         </div>
-        <div>
+        <div className={styles.navContainer}>
         <NavLink to="/" className={styles.nav}>
             Home
         </NavLink>
