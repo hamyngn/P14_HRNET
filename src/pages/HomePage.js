@@ -19,6 +19,7 @@ const HomePage = () => {
     const [startDate, setStartDate] = useState(null)
     const [street, setStreet] = useState(null)
     const [city, setCity] = useState(null)
+    const [state, setState] = useState(null)
     const [zipCode, setZipCode] = useState(null)
     const [department, setDepartment] = useState(null)
     const [open, setOpen] = useState(false);
@@ -28,7 +29,6 @@ const HomePage = () => {
     let dispatch = useDispatch()
 
     const saveEmployee = () => {
-        let state = document.getElementById('state').value
         dispatch(save(firstName, lastName, dateOfBirth, startDate, street, city, state, zipCode, department))
         handleOpen()
     }
@@ -63,7 +63,9 @@ return (
                 type="text" 
                 id="first-name" 
                 required
-                onChange={(event) => setFirstName(event.target.value)}/>
+                onChange={(event) => setFirstName(event.target.value)}
+                className={styles.input}
+                />
 
                 <label htmlFor="last-name">Last Name</label>
                 <input 
@@ -71,6 +73,7 @@ return (
                 id="last-name" 
                 required
                 onChange={(event) => setLastName(event.target.value)}
+                className={styles.input}
                 />
 
                 <p className={styles.datePickerLabel}>Date of birth</p>
@@ -104,6 +107,7 @@ return (
                     type="text"
                     required
                     onChange={(event) => setStreet(event.target.value)}
+                    className={styles.input}
                     />
 
                     <label htmlFor="city">City</label>
@@ -112,9 +116,10 @@ return (
                     type="text" 
                     required
                     onChange={(event) => setCity(event.target.value)}
+                    className={styles.input}
                     />
 
-                    <SelectCustom labelFor="state" data={states} value="abbreviation" text="name"/>
+                    <SelectCustom id="state" label="State" data={states} value="abbreviation" text="name" onChange={(value) => setState(value)}/>
 
                     <label htmlFor="zip-code">Zip Code</label>
                     <input 
@@ -122,6 +127,7 @@ return (
                     type="number"
                     required
                     onChange={(event) => setZipCode(event.target.value)}
+                    className={styles.input}
                     />
                 </fieldset>
 

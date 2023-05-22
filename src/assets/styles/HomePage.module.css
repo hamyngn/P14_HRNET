@@ -38,9 +38,17 @@ input {
     border-radius: 4px;
 }
 
-input[type="text"], input[type="number"] {
-    width: 400px;
+input[type="text"] {
+    width: 370px;
     font-size: 1rem;
+}
+
+.input {
+    width: 400px !important
+}
+
+
+@media (max-width: 768px) {
 }
 
 @media (max-width: 575px) {
@@ -52,10 +60,24 @@ input[type="text"], input[type="number"] {
         font-size: 0.86rem;
     }
 
-    input[type="text"], input[type="number"] {
+    input[type="text"] {
     font-size: 0.8rem;
     width: 250px;
     padding: 10px;
-    border-radius: 4px;
+    }
+
+    .input {
+        width: 300px !important
+    }
+}
+
+@media (max-width: 320px) {
+    input[type="text"] {
+        width: 200px;
+        font-size: 1rem;
+    }
+
+    .input {
+        width: 250px !important;
     }
 }
