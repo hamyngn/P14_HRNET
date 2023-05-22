@@ -6,38 +6,48 @@ const SelectCustom = ({label, id, data, value, text, onChange}) => {
     // State to track if the list is showed or not
     const [showList, setShowList] = useState(false)
     // State to track the selected option text
-    const [selectText, setSelectText] = useState(data[0][text])
+    const [selectText, setSelectText] = useState("")
     // State to track the list
     const [list, setList] = useState(null)
     // State to track the button is focused or not
     const [isFocus, setIsFocus] = useState(false)
+    // State to track options
+    const [options, setOptions] = useState(null)
 
-    const refButton = useRef();
+    const refButton = useRef()
     const refDropDown = useRef()
     
+    useEffect (()=> {
+        if(data.length) {
+            const options = data.map((data, index) =>
+            <option value={data[value]} key={index}>{data[text]}</option>
+            )
+            setOptions(options)
+            setSelectText(data[0][text])
+        }
+    }, [data])
+
+    // show and hide list
+    const handleShowList = () => {
+        refButton.current.classList.add(`${styles.uiCornerTop}`)
+        setShowList(!showList)
+        setIsFocus(true)
+        if(showList) {
+            refButton.current.classList.remove(`${styles.uiCornerTop}`) 
+        }
+    }
+
     // handle list selected
     const handleClick = (value, text) => {
         if(onChange) {
             onChange(value)
         }
         setSelectText(text)
-        setShowList(false);
+        setShowList(false)
+        buttonFocus()
         refButton.current.classList.remove(`${styles.uiCornerTop}`) 
     }
 
-    const options = data.map((data, index) =>
-        <option value={data[value]} key={index}>{data[text]}</option>
-    )
-
-    // show and hide list
-    const handleShowList = () => {
-        refButton.current.classList.add(`${styles.uiCornerTop}`)
-        setShowList(!showList)
-        setIsFocus(!isFocus)
-        if(showList) {
-            refButton.current.classList.remove(`${styles.uiCornerTop}`) 
-        }
-    }
     // create list of options
     const createList = () => {
         const lists = data.map((data, index) =>
@@ -50,12 +60,6 @@ const SelectCustom = ({label, id, data, value, text, onChange}) => {
     )
         setList(lists)
     }
-    
-    // Associate existing label with the new button
-    const buttonFocus = () => {
-        refButton.current.focus();
-        setIsFocus(true)
-    }
 
     // Delay rendering the menu items until the button receives focus.
 	// The menu may have already been rendered via a programmatic open.
@@ -64,6 +68,12 @@ const SelectCustom = ({label, id, data, value, text, onChange}) => {
             createList();
         }
     }, [isFocus])
+    
+    // Associate existing label with the new button
+    const buttonFocus = () => {
+        refButton.current.focus();
+        setIsFocus(true)
+    }
     
     // Close menu if click outside of menu
     useEffect(() => {
@@ -82,6 +92,9 @@ const SelectCustom = ({label, id, data, value, text, onChange}) => {
 
     return (
         <>
+        {!data.length ? (
+        <div>No data</div>
+        ) : (
         <div className={styles.container}>
         { label && (
         <label htmlFor={`${id}-button`} onClick={() => buttonFocus()}>{label}</label> 
@@ -89,7 +102,7 @@ const SelectCustom = ({label, id, data, value, text, onChange}) => {
         <select name={id} id={id} style={{display:"none"}}>
             {options}
         </select>
-        <div className={styles.list}>
+        <div className={styles.list} ref={refDropDown}>
             <span 
             id={`${id}-button`} 
             className={styles.selectMenuButton} 
@@ -105,7 +118,7 @@ const SelectCustom = ({label, id, data, value, text, onChange}) => {
                 <span className={styles.selectMenuIcon}><SelectIcon className={styles.selectIcon}/></span>
             </span>
             { showList &&
-            <div className={styles.dropDownMenu} ref={refDropDown}>
+            <div className={styles.dropDownMenu}>
             <ul 
             id={`${id}-menu`} 
             style={showList? {display: "block"}: {display: "none"}} 
@@ -117,10 +130,10 @@ const SelectCustom = ({label, id, data, value, text, onChange}) => {
                 {list}
             </ul>
             </div>
-            }
-            
+            }        
         </div>
         </div>
+        )}
         </>
     )
 }
