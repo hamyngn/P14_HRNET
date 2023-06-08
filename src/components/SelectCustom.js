@@ -79,7 +79,7 @@ const SelectCustom = ({label, id, data, value, text, onChange, disabled, hidden}
 
     useEffect(() => {  
         // set focus to first list item if there is no selected item
-        if(list && showList && selectedIndex === null) {
+        if(list && showList && selectedIndex === null && focusedItemIndex) {
             refButton.current.blur()
             listRef[focusedItemIndex].current.focus()
         }
@@ -122,10 +122,10 @@ const SelectCustom = ({label, id, data, value, text, onChange, disabled, hidden}
 	// The menu may have already been rendered via a programmatic open.
     useEffect(() => {
         // handle onChange value when no item selected
-        if(onChange && focusedItemIndex && !selectedIndex) {
+        if(onChange && !selectedIndex && (focusedItemIndex || focusedItemIndex === 0) ) {
             onChange(data[focusedItemIndex][value])
         }
-        
+
         // handle list selected
         const handleClick = (value, text, index) => {
             if(onChange) {

@@ -3,7 +3,8 @@ import styles from "../assets/styles/HomePage.module.css"
 import SelectCustom from "../components/SelectCustom"
 import { useDispatch } from "react-redux";
 import { save } from "../redux/actions/actions";
-import states from '../data'
+import {states} from '../data'
+import {departments} from '../data'
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -131,19 +132,7 @@ return (
                     />
                 </fieldset>
 
-                <label htmlFor="department">Department</label>
-                <select 
-                name="department" 
-                id="department"
-                required
-                onChange={(event) => setDepartment(event.target.value)} 
-                >
-                    <option>Sales</option>
-                    <option>Marketing</option>
-                    <option>Engineering</option>
-                    <option>Human Resources</option>
-                    <option>Legal</option>
-                </select>
+                <SelectCustom id="department" label="Department" data={departments} value="name" text="name" onChange={(value) => setDepartment(value)}/>
             </form>
             <button onClick={saveEmployee} style={{marginTop:5}}>Save</button>
             </div>

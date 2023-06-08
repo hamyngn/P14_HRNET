@@ -1,4 +1,4 @@
-const states = [
+export const states = [
     {
         "name": "Alabama",
         "abbreviation": "AL"
@@ -237,8 +237,22 @@ const states = [
     }
 ];
 
-const department = [
-    
+export const departments = [
+    {
+        "name": "Sales"
+    },
+    {
+        "name": "Marketing"
+    },
+    {
+        "name": "Engineering"
+    },
+    {
+        "name": "Human Resources"
+    },
+    {
+        "name": "Legal"
+    },
 ]
 
-export default states;
+export default {states, departments};
