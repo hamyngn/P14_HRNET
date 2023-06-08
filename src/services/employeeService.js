@@ -1,4 +1,4 @@
-var employees = [];
+let employees = [];
 
 const saveEmployee = (firstName, lastName, dateOfBirth, startDate, street, city, state, zipCode, department) => {
     const employee = {

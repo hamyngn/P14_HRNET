@@ -119,7 +119,7 @@ return (
                     className={styles.input}
                     />
 
-                    <SelectCustom id="state" label="State" data={states} value="abbreviation" text="name" onChange={(value) => setState(value)}/>
+                <SelectCustom id="state" label="State" disabled={["CA", "AZ"]} hidden={["AL", "CT", "WY"]} data={states} value="abbreviation" text="name" onChange={(value) => setState(value)}/>
 
                     <label htmlFor="zip-code">Zip Code</label>
                     <input 

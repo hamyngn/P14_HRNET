@@ -32,6 +32,14 @@
     color: #ffffff;
 }
 
+.selectMenuButton:hover, .selectMenuButton:focus {
+    background-color: #dcdcdc9f;
+}
+
+.selectMenuButton:focus {
+    border: 1px solid black
+}
+
 .selectMenuText {
     display: block;
     margin-right: 20px;
@@ -57,8 +65,7 @@
     width: 100%;
 }
 
-.selectMenuMenu {
-    border: 1px solid #c5c5c5;
+.selectMenuMenu { 
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
     background-color: #ffffff;
@@ -66,17 +73,30 @@
 
 ul {
     list-style-type: none;
-    padding: 10px;
     margin: 0;
 }
 
+.menuActive {
+    border: 1px solid #c5c5c5;
+    padding: 10px;
+}
+
 ul li:hover {
+    cursor: pointer;
+}
+
+li:focus {
     background-color: #007fff;
 }
 
 .selectMenuIcon, .selectIcon {
     width: 16px;
     height: 16px;
+}
+
+.disabled {
+    pointer-events: none;
+    background-color: #c5c5c5;
 }
 
 @media (max-width: 575px) {
