@@ -14,7 +14,6 @@ const columns: GridColDef[] = [
     { field: 'zipCode', headerName: 'Zip Code', type: 'number' },
     { field: 'department', headerName: 'Department' },
 ];
-
 const getRows = () => {
     let rows = []
     employeeService.employees.map((e, index) => {
@@ -23,14 +22,12 @@ const getRows = () => {
     })
     return rows;
 }
-
 const Employee = () => {
     const [rows, setRows] = useState([]);
 
     useEffect(() => {
         setRows(getRows())
     }, [])
-
 return (
     <>
     <div id="employee-div" className={styles.container}>
@@ -52,5 +49,4 @@ return (
     </>
 )
 }
-
 export default Employee;

@@ -1,5 +1,4 @@
 let employees = [];
-
 const saveEmployee = (firstName, lastName, dateOfBirth, startDate, street, city, state, zipCode, department) => {
     const employee = {
         firstName: firstName,
@@ -14,10 +13,8 @@ const saveEmployee = (firstName, lastName, dateOfBirth, startDate, street, city,
     }
     employees.push(employee);
 }
-
 const exportedObject = {
     employees,
     saveEmployee,
 }
-
 export default exportedObject

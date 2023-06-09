@@ -254,5 +254,4 @@ export const departments = [
         "name": "Legal"
     },
 ]
-
 export default {states, departments};

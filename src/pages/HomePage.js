@@ -27,22 +27,18 @@ const HomePage = () => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
     let dispatch = useDispatch()
 
     const saveEmployee = () => {
         dispatch(save(firstName, lastName, dateOfBirth, startDate, street, city, state, zipCode, department))
         handleOpen()
     }
-
     const pad = (s) => { return (s < 10) ? '0' + s : s; }
-
     const convertDate = (date) => {
         const newDate = new Date(date);
         const dayMonthYear = `${pad(newDate.getDate())}/${pad(newDate.getMonth()+1)}/${newDate.getFullYear()}`
         return dayMonthYear;
     }
-
     const style = {
         position: 'absolute',
         top: '50%',
@@ -58,7 +54,7 @@ const HomePage = () => {
 return (
     <div className={styles.container}>
         <div className={styles.flexColumn}>
-            <h2>Create Employee</h2>
+            <h1>Create Employee</h1>
             <form action="#" id="create-employee">
                 <Input 
                 label="First Name" 
@@ -68,7 +64,6 @@ return (
                 onChange={(value) => setFirstName(value)}
                 className={styles.input}
                 />
-
                 <Input 
                 label="Last Name" 
                 id="last-name" 
@@ -77,7 +72,6 @@ return (
                 onChange={(value) => setLastName(value)}
                 className={styles.input}
                 />
-
                 <p className={styles.datePickerLabel}>Date of birth</p>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={['DatePicker']}>
@@ -87,7 +81,6 @@ return (
                     format="DD/MM/YYYY"/>
                 </DemoContainer>
                 </LocalizationProvider>
-
                 <p className={styles.datePickerLabel}>Start date</p>
                 <div id="datePicker">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -99,7 +92,6 @@ return (
                 </DemoContainer>
                 </LocalizationProvider>
                 </div>
-
                 <fieldset className={styles.address}>
                     <legend>Address</legend>
                     <Input 
@@ -118,9 +110,7 @@ return (
                     onChange={(value) => setCity(value)}
                     className={styles.input}
                     />
-
                     <SelectCustom id="state" label="State" disabled={["CA", "AZ"]} hidden={["AL", "CT", "WY"]} data={states} value="abbreviation" text="name" onChange={(value) => setState(value)}/>
-
                     <Input 
                     label="Zip Code" 
                     id="zip-code"
@@ -130,7 +120,6 @@ return (
                     className={styles.input}
                     />
                 </fieldset>
-
                 <SelectCustom id="department" label="Department" data={departments} value="name" text="name" onChange={(value) => setDepartment(value)}/>
             </form>
             <button onClick={saveEmployee} style={{marginTop:5}}>Save</button>
@@ -141,9 +130,7 @@ return (
             aria-describedby="modal-modal-description"
             >
             <Box sx={style}>
-            <Typography id="modal-modal-description">
-            Employee Created!
-            </Typography>
+            <Typography id="modal-modal-description">Employee Created!</Typography>
             </Box>
             </Modal>
     </div>

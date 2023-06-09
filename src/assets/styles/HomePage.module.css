@@ -52,7 +52,7 @@ input[type="text"] {
 }
 
 @media (max-width: 575px) {
-    h2 {
+    h1 {
         font-size: 1.2rem;
     }
 

@@ -1,7 +1,6 @@
 import { ADD_EMPLOYEE } from "../actions/actionTypes";
 
 const initialState = {}
-
 const saveEmployee = (state = initialState, action) => {
     switch (action.type) {
       case ADD_EMPLOYEE: {
@@ -15,5 +14,4 @@ const saveEmployee = (state = initialState, action) => {
         return state;
     }
   }
-
 export default saveEmployee

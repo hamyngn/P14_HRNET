@@ -2,7 +2,6 @@ import React from "react"
 import PropTypes from 'prop-types';
 
 const Input = ({label, type, id, required, onChange, className}) => {
-
     return (
     <>
         <label htmlFor={id}>{label}</label>
@@ -17,7 +16,6 @@ const Input = ({label, type, id, required, onChange, className}) => {
     </>
     )
 }
-
 Input.propTypes = {
     label: PropTypes.string,
     id: PropTypes.string,
@@ -26,5 +24,4 @@ Input.propTypes = {
     required: PropTypes.bool,
     className:  PropTypes.string
 }
-
 export default Input

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { Outlet, NavLink } from 'react-router-dom';
 import styles from '../assets/styles/Layout.module.css'
 import logo from '../assets/images/logo.png'
 
@@ -23,9 +23,6 @@ const Layout = () => {
         <main>
           <Outlet />
         </main>
-        <footer className={styles.footer}>
-
-        </footer>
         </>
     )
 }
