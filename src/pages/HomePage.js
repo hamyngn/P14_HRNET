@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { save } from "../redux/actions/actions";
 import {states} from '../data'
 import {departments} from '../data'
+import Input from "../components/Input"
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -59,21 +60,21 @@ return (
         <div className={styles.flexColumn}>
             <h2>Create Employee</h2>
             <form action="#" id="create-employee">
-                <label htmlFor="first-name">First Name</label>
-                <input 
-                type="text" 
+                <Input 
+                label="First Name" 
                 id="first-name" 
-                required
-                onChange={(event) => setFirstName(event.target.value)}
+                type="text" 
+                required={true}
+                onChange={(value) => setFirstName(value)}
                 className={styles.input}
                 />
 
-                <label htmlFor="last-name">Last Name</label>
-                <input 
-                type="text" 
+                <Input 
+                label="Last Name" 
                 id="last-name" 
-                required
-                onChange={(event) => setLastName(event.target.value)}
+                type="text" 
+                required={true}
+                onChange={(value) => setLastName(value)}
                 className={styles.input}
                 />
 
@@ -101,33 +102,31 @@ return (
 
                 <fieldset className={styles.address}>
                     <legend>Address</legend>
-
-                    <label htmlFor="street">Street</label>
-                    <input 
+                    <Input 
+                    label="Street" 
                     id="street" 
-                    type="text"
-                    required
-                    onChange={(event) => setStreet(event.target.value)}
+                    type="text" 
+                    required={true}
+                    onChange={(value) => setStreet(value)}
                     className={styles.input}
                     />
-
-                    <label htmlFor="city">City</label>
-                    <input 
+                    <Input 
+                    label="City" 
                     id="city" 
                     type="text" 
-                    required
-                    onChange={(event) => setCity(event.target.value)}
+                    required={true}
+                    onChange={(value) => setCity(value)}
                     className={styles.input}
                     />
 
-                <SelectCustom id="state" label="State" disabled={["CA", "AZ"]} hidden={["AL", "CT", "WY"]} data={states} value="abbreviation" text="name" onChange={(value) => setState(value)}/>
+                    <SelectCustom id="state" label="State" disabled={["CA", "AZ"]} hidden={["AL", "CT", "WY"]} data={states} value="abbreviation" text="name" onChange={(value) => setState(value)}/>
 
-                    <label htmlFor="zip-code">Zip Code</label>
-                    <input 
-                    id="zip-code" 
-                    type="number"
-                    required
-                    onChange={(event) => setZipCode(event.target.value)}
+                    <Input 
+                    label="Zip Code" 
+                    id="zip-code"
+                    type="number" 
+                    required={true}
+                    onChange={(value) => setZipCode(value)}
                     className={styles.input}
                     />
                 </fieldset>

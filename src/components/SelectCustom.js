@@ -79,7 +79,7 @@ const SelectCustom = ({label, id, data, value, text, onChange, disabled, hidden}
 
     useEffect(() => {  
         // set focus to first list item if there is no selected item
-        if(list && showList && selectedIndex === null && focusedItemIndex) {
+        if(list && listHandled && showList && selectedIndex === null && focusedItemIndex) {
             refButton.current.blur()
             listRef[focusedItemIndex].current.focus()
         }
@@ -320,7 +320,7 @@ const SelectCustom = ({label, id, data, value, text, onChange, disabled, hidden}
             aria-controls={`${id}-menu`}
 			aria-haspopup = "true"
             >
-                <span className={styles.selectMenuText}>{selectText && isFocus? selectText : buttonText}</span>
+                <span className={styles.selectMenuText}>{selectText ? selectText : buttonText}</span>
                 <span className={styles.selectMenuIcon}><SelectIcon className={styles.selectIcon}/></span>
             </span>
             <div className={styles.dropDownMenu}>
