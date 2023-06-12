@@ -44,10 +44,10 @@ input[type="text"] {
 }
 
 .input {
-    width: 400px !important;
+    width: 430px !important;
 }
 
-@media (max-width:810px) {
+@media (max-width:912px) {
     .input {
         width: 93% !important;
     }
@@ -68,7 +68,8 @@ input[type="text"] {
     }
 
     .input {
-        width: 90% !important
+        width: 90% !important;
+        padding: 10px;
     }
 }
 
