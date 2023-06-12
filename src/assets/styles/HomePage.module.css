@@ -39,18 +39,19 @@ input {
 }
 
 input[type="text"] {
-    width: 370px;
+    width: 400px;
     font-size: 1rem;
 }
 
 .input {
-    width: 400px !important
+    width: 400px !important;
 }
 
-
-@media (max-width: 768px) {
+@media (max-width:810px) {
+    .input {
+        width: 93% !important;
+    }
 }
-
 @media (max-width: 575px) {
     h1 {
         font-size: 1.2rem;
@@ -61,23 +62,22 @@ input[type="text"] {
     }
 
     input[type="text"] {
-    font-size: 0.8rem;
-    width: 250px;
-    padding: 10px;
+        font-size: 0.8rem;
+        width: 100%;
+        padding: 10px;
     }
 
     .input {
-        width: 300px !important
+        width: 90% !important
     }
 }
 
 @media (max-width: 320px) {
-    input[type="text"] {
-        width: 200px;
+    input[type="text"] { 
         font-size: 1rem;
     }
 
     .input {
-        width: 250px !important;
+        width: 90% !important;
     }
 }
