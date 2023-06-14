@@ -9,7 +9,7 @@ const Layout = () => {
         <>
         <header className={styles.flexRow}>
         <div className={styles.title}>
-            <img src={logo} alt="Logo" srcset={`${logoSmall} 480w, ${logo} 1080w`} sizes="50vw" className={styles.logo}/>
+            <img src={logo} alt="Logo" srcSet={`${logoSmall} 480w, ${logo} 1080w`} sizes="50vw" className={styles.logo}/>
             <h1 style={{color: '#4F5A26'}}>HRnet</h1>
         </div>
         <div className={styles.navContainer}>

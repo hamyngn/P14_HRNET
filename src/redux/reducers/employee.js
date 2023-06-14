@@ -1,17 +1,24 @@
-import { ADD_EMPLOYEE } from "../actions/actionTypes";
+import { ADD_EMPLOYEE, GET_EMPLOYEE } from "../actions/actionTypes";
 
-const initialState = {}
-const saveEmployee = (state = initialState, action) => {
+const initialState = {list:[]}
+
+const employee = (state = initialState, action) => {
     switch (action.type) {
       case ADD_EMPLOYEE: {
-        const { employee } = action.payload;
         return {
           ...state,
-          employee: employee,
+          list: [...(state.list), action.payload],
         };
+      }
+      case GET_EMPLOYEE: {
+        return {
+          ...state,
+          list: [...(state.list)]
+        }
       }
       default:
         return state;
     }
   }
-export default saveEmployee
+
+export default employee

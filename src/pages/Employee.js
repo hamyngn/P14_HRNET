@@ -3,6 +3,8 @@ import styles from "../assets/styles/Employee.module.css"
 import Box from '@mui/material/Box';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import employeeService from '../services/employeeService'
+import { useDispatch, useSelector } from "react-redux";
+import { getEmployee } from '../redux/actions/actions';
 
 const columns: GridColDef[] = [
     { field: 'firstName', headerName: 'First name' },
@@ -14,16 +16,26 @@ const columns: GridColDef[] = [
     { field: 'zipCode', headerName: 'Zip Code', type: 'number' },
     { field: 'department', headerName: 'Department' },
 ];
-const getRows = () => {
-    let rows = []
-    employeeService.employees.map((e, index) => {
-        rows.push({id: index, firstName: e.firstName, lastName: e.lastName, dateOfBirth: e.dateOfBirth, startDate: e.startDate, street: e.street, state: e.state, zipCode: e.zipCode, department: e.department})
-        return rows
-    })
-    return rows;
-}
+
 const Employee = () => {
     const [rows, setRows] = useState([]);
+    const dispatch = useDispatch();
+    const employees = useSelector((state) => state.employee.list);
+
+    useEffect(() => {
+      dispatch(getEmployee())
+    }, [dispatch])
+
+    const getRows = () => {
+      let rows = []
+      if(employees) {
+      employees.map((e, index) => {
+        const employee = e.employee
+        rows.push({id: index, firstName: employee.firstName, lastName: employee.lastName, dateOfBirth: employee.dateOfBirth, startDate: employee.startDate, street: employee.street, state: employee.state, zipCode: employee.zipCode, department: employee.department})
+        return rows
+      })}
+      return rows;
+  }
 
     useEffect(() => {
         setRows(getRows())

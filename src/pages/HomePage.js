@@ -110,7 +110,7 @@ return (
                     onChange={(value) => setCity(value)}
                     className={styles.input}
                     />
-                    <SelectCustom id="state" label="State" disabled={["CA", "AZ"]} hidden={["AL", "CT", "WY"]} data={states} value="abbreviation" text="name" onChange={(value) => setState(value)}/>
+                    <SelectCustom id="state" label="State" data={states} value="abbreviation" text="name" onChange={(value) => setState(value)}/>
                     <Input 
                     label="Zip Code" 
                     id="zip-code"
@@ -120,9 +120,9 @@ return (
                     className={styles.input}
                     />
                 </fieldset>
-                <SelectCustom id="department" label="Department" data={departments} value="name" text="name" onChange={(value) => setDepartment(value)}/>
+                <SelectCustom id="department" label="Department" data={departments} value="name" text="name" onChange={(value) => setDepartment(value)} buttonDisabled={true}/>
             </form>
-            <button onClick={saveEmployee} style={{marginTop:5}}>Save</button>
+            <button className={styles.button} onClick={saveEmployee} style={{marginTop:5}}>Save</button>
             </div>
             <Modal
             open={open}

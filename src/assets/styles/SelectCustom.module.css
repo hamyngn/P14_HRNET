@@ -46,6 +46,11 @@
     white-space: nowrap;
 }
 
+.disabled {
+    cursor: none;
+    background-color: #c5c5c5;
+}
+
 .uiCornerTop {
     border-radius: 0;
     border-top-right-radius: 3px;
