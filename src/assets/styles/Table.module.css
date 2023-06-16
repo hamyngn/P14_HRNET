@@ -1,0 +1,18 @@
+.container {
+    display: flex;
+    justify-content: center;
+    overflow-x:auto;
+}
+
+.table {
+    width: 90vw;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover {background-color: #F8F7F1;}

@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from 'prop-types';
 
-const Input = ({label, type, id, required, onChange, className}) => {
+const Input = ({label, type, id, required, onChange, className, placeholder, onFocus, onBlur}) => {
     return (
     <>
         <label htmlFor={id}>{label}</label>
@@ -12,6 +12,9 @@ const Input = ({label, type, id, required, onChange, className}) => {
         required={required}
         onChange={(e) => onChange(e.target.value)}
         className={className}
+        placeholder={placeholder}
+        onFocus={onFocus}
+        onBlur={onBlur}
         />
     </>
     )

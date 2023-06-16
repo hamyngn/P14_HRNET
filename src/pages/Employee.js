@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styles from "../assets/styles/Employee.module.css"
-import Box from '@mui/material/Box';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import employeeService from '../services/employeeService'
 import { useDispatch, useSelector } from "react-redux";
 import { getEmployee } from '../redux/actions/actions';
+import Table from "../components/Table"
 
-const columns: GridColDef[] = [
+const columns = [
+    { field: 'id', headerName: 'ID' },
     { field: 'firstName', headerName: 'First name' },
     { field: 'lastName', headerName: 'Last name' },
     { field: 'dateOfBirth', headerName: 'Date Of Birth' },
@@ -26,38 +25,37 @@ const Employee = () => {
       dispatch(getEmployee())
     }, [dispatch])
 
-    const getRows = () => {
-      let rows = []
-      if(employees) {
-      employees.map((e, index) => {
-        const employee = e.employee
-        rows.push({id: index, firstName: employee.firstName, lastName: employee.lastName, dateOfBirth: employee.dateOfBirth, startDate: employee.startDate, street: employee.street, state: employee.state, zipCode: employee.zipCode, department: employee.department})
-        return rows
-      })}
-      return rows;
-  }
-
     useEffect(() => {
-        setRows(getRows())
-    }, [])
+      const getRows = () => {
+        let rows = []
+        if(employees) {
+        employees.map((e, index) => {
+          const employee = e.employee
+          rows.push({id: index + 1, firstName: employee.firstName, lastName: employee.lastName, dateOfBirth: employee.dateOfBirth, startDate: employee.startDate, street: employee.street, state: employee.state, zipCode: employee.zipCode, department: employee.department})
+          return rows
+        })}
+        return rows;
+    }
+        setRows(getRows().reverse())
+    }, [employees])
+
 return (
     <>
     <div id="employee-div" className={styles.container}>
             <h1>Current Employees</h1>
     </div>
-    <Box sx={{ height: 400, width: '80%', marginLeft: '10%' }}>
-      <DataGrid
+      <Table
         rows={rows}
         columns={columns}
-        initialState={{
+        id="employees-table"
+/*         initialState={{
           pagination: {
             paginationModel: { page: 0, pageSize: 5 },
           },
-        }}
-        pageSizeOptions={[5, 10]}
-        checkboxSelection
+        }} */
+/*         pageSizeOptions={[5, 10]}
+        checkboxSelection */
       />
-    </Box>
     </>
 )
 }

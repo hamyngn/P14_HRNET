@@ -48,11 +48,13 @@ input[type="text"] {
 }
 
 .button {
+    display: block;
     width: 100px;
     border: 1px solid #c5c5c5;
     color:  white;
     background-color: #4F5A26;
     padding: 7px;
+    margin: auto;
     margin-top: 20px !important;
     cursor: pointer;
     font-weight: 500;

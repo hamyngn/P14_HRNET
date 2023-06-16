@@ -213,6 +213,7 @@ const SelectCustom = ({label, id, data, value, text, onChange, disabled, hidden,
             handleShowList()
         }
         if(e.code === "Tab") {
+            console.log(refButton.current.parentElement.nextSibling)
             refButton.current.parentElement.nextSibling.focus()
             if(showList){
                 setShowList(false)
