@@ -15,6 +15,7 @@ const Input = ({label, type, id, required, onChange, className, placeholder, onF
         placeholder={placeholder}
         onFocus={onFocus}
         onBlur={onBlur}
+        tabIndex={0}
         />
     </>
     )

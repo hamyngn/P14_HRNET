@@ -23,7 +23,8 @@ const HomePage = () => {
     const handleClose = () => setOpen(false);
     let dispatch = useDispatch()
 
-    const saveEmployee = () => {
+    const saveEmployee = (e) => {
+        e.preventDefault()
         dispatch(save(firstName, lastName, dateOfBirth, startDate, street, city, state, zipCode, department))
         handleOpen()
     }
@@ -38,7 +39,7 @@ return (
     <div className={styles.container}>
         <div className={styles.flexColumn}>
             <h1>Create Employee</h1>
-            <form action="#" id="create-employee" onSubmit={saveEmployee}>
+            <form action="#" id="create-employee" onSubmit={(e) => saveEmployee(e)}>
                 <Input 
                 label="First Name" 
                 id="first-name" 
