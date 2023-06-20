@@ -23,16 +23,47 @@ const HomePage = () => {
     const handleClose = () => setOpen(false);
     let dispatch = useDispatch()
 
+    // submit form
     const saveEmployee = (e) => {
         e.preventDefault()
         dispatch(save(firstName, lastName, dateOfBirth, startDate, street, city, state, zipCode, department))
         handleOpen()
     }
+
+    // converDate to dd/mm/yyyy format
     const pad = (s) => { return (s < 10) ? '0' + s : s; }
     const convertDate = (date) => {
         const newDate = new Date(date);
         const dayMonthYear = `${pad(newDate.getDate())}/${pad(newDate.getMonth()+1)}/${newDate.getFullYear()}`
         return dayMonthYear;
+    }
+
+    /**
+     * check if string is date format
+     * @param {string} value 
+     * @returns
+     */
+    const isDate = (value) => {
+        const date_regex = /^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|1\d|2\d|3[01])$/;
+        if(date_regex.test(value)) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    /**
+     * handle input date validation
+     * @param {event} e 
+     */
+    const validateInputDate = (e) => {
+        let bool = isDate(e.target.value);
+        if(bool) {
+            e.target.type = "text"
+            e.target.value = convertDate(e.target.value)
+        } else {
+            e.target.value = ""
+        }
     }
 
 return (
@@ -65,7 +96,7 @@ return (
                 className={styles.input}
                 placeholder={""}
                 onFocus={(e) => e.target.type = "date"}
-                onBlur={(e) => {e.target.type = "text"; e.target.value=`${convertDate(e.target.value)}`}}
+                onBlur={(e) => validateInputDate(e)}
                 />
                 <Input 
                 label="Start date" 
@@ -76,7 +107,7 @@ return (
                 className={styles.input}
                 placeholder={""}
                 onFocus={(e) => e.target.type = "date"}
-                onBlur={(e) => {e.target.type = "text"; e.target.value=`${convertDate(e.target.value)}`}}
+                onBlur={(e) => validateInputDate(e)}
                 />
                 <fieldset className={styles.address}>
                     <legend>Address</legend>

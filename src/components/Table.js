@@ -6,12 +6,30 @@ const Table = ({columns, rows, id}) => {
     const [tableHead, setTableHead] = useState([])
     const [tableBody, settableBody] = useState([])
     const [fields, setFields] = useState(null)
-
+/*     const [ascending, setAscending] = useState([]) */
+ 
     let ascending = []
     for(let i = 0; i < columns.length ; i += 1) {
         ascending.push(true)
     }
 
+/*     useEffect(() => {
+        const createAscArray = () => {
+            let asc = []
+            for(let i = 0; i < columns.length ; i += 1) {
+                asc.push(true)
+            }
+            return asc
+        }
+        setAscending(createAscArray())
+    },[columns.length]) */
+
+
+    /**
+     * check if sort by ascending or descending
+     * @param {number} index 
+     * @returns 
+     */
     const checkAscending = (index) => {
             if(ascending[index]) {
                 return true
@@ -20,6 +38,30 @@ const Table = ({columns, rows, id}) => {
             }
     }
 
+    /**
+     * check if string is date format
+     * @param {string} date
+     * @returns 
+     */
+    const isDate = (date) => {
+        const date_regex = /^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$/;
+        if(date_regex.test(date)) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    const newDate = (date) => {
+        const convertDate = date.split("/").reverse().join("-");
+        return convertDate
+    }
+
+    /**
+     * handle sort table by columns
+     * @param {event} e 
+     * @param {number} index 
+     */
     const sortData = (e, index) => {
         e.preventDefault()
         let i, switching, shouldSwitch, x, y, table, ifAscending
@@ -27,6 +69,8 @@ const Table = ({columns, rows, id}) => {
         switching = true;
         ifAscending = checkAscending(index)
         ascending[index] = !ascending[index]
+        console.log(ascending[index])
+
         while (switching) {
             //start by saying: no switching is done:
             switching = false;
@@ -41,10 +85,16 @@ const Table = ({columns, rows, id}) => {
               x = rows[i].getElementsByTagName("TD")[index];
               y = rows[i + 1].getElementsByTagName("TD")[index];
               let isnum = /^\d+$/.test(x.innerHTML);
-              //check if the two rows should switch place:
+              let ifDate = isDate(x.innerHTML)
+            //check if the two rows should switch place:
             if(ifAscending) {
                 if(isnum) {
                     if(parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if(ifDate) {
+                    if(new Date(newDate(x.innerHTML)).getTime() > new Date(newDate(y.innerHTML)).getTime()) {
                         shouldSwitch = true;
                         break;
                     }
@@ -59,6 +109,11 @@ const Table = ({columns, rows, id}) => {
             else {
                 if(isnum) {
                     if(parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if(ifDate) {
+                    if(new Date(newDate(x.innerHTML)).getTime() < new Date(newDate(y.innerHTML)).getTime()) {
                         shouldSwitch = true;
                         break;
                     }
@@ -86,7 +141,7 @@ const Table = ({columns, rows, id}) => {
     useEffect(() => {
         const createTableHeads = () => {
             const cols = columns.map((e, index) => 
-            <th key={`${id}-col-${index}`} className={styles.thead} onClick={(e) => sortData(e, index)}>{e.headerName}<Icon aria-label="icon" className={styles.icon}/></th>
+            <th key={`${id}-col-${index}`} className={styles.thead} onClick={(e) => sortData(e, index)}>{e.headerName}<Icon aria-label="icon" className={styles.icon} style={ascending[index] ? {transform : ''} : {transform: 'rotate(180deg)'}}/></th>
             )
             setTableHead(cols)
         } 
