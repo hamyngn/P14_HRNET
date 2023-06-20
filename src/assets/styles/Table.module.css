@@ -15,4 +15,19 @@ th, td {
     border-bottom: 1px solid #ddd;
 }
 
+th:hover {
+    cursor: pointer;
+}
+
 tr:hover {background-color: #F8F7F1;}
+
+.thead .icon {
+    width: 0.75em;
+    margin-left: 10px;
+    margin-bottom: -2px;
+    visibility: hidden;
+}
+
+.thead:hover .icon, .thead:focus .icon{
+    visibility: visible;
+}
