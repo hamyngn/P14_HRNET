@@ -1,4 +1,4 @@
-import React, {useEffect, useState } from "react"
+import React, {useEffect, useState, useRef, createRef } from "react"
 import styles from "../assets/styles/Table.module.css"
 import { ReactComponent as Icon } from '../assets/images/arrow-down-solid.svg';
 
@@ -6,24 +6,50 @@ const Table = ({columns, rows, id}) => {
     const [tableHead, setTableHead] = useState([])
     const [tableBody, settableBody] = useState([])
     const [fields, setFields] = useState(null)
-/*     const [ascending, setAscending] = useState([]) */
- 
-    let ascending = []
-    for(let i = 0; i < columns.length ; i += 1) {
-        ascending.push(true)
+    const refTable = useRef()
+    
+    const createAscArray = () => {
+        let asc = []
+        for(let i = 0; i < columns.length ; i += 1) {
+            asc.push(true)
+        }
+        return asc
+    }
+    const [ascending, setAscending] = useState(createAscArray())
+
+    useEffect(() => {
+        setAscending(createAscArray())
+    },[columns.length])
+
+    let elRefs = []
+    let refs = []
+    if(rows && rows.length && columns && columns.length) {
+        for(let i = 0; i < rows.length; i +=1) {
+            for(let j = 0; j < columns.length; j += 1) {
+                refs.push(j)
+            }
+            elRefs.push(refs)
+        }
     }
 
-/*     useEffect(() => {
-        const createAscArray = () => {
-            let asc = []
-            for(let i = 0; i < columns.length ; i += 1) {
-                asc.push(true)
+    const createTdRef = () => {
+        if(rows && rows.length && columns && columns.length) {
+            for(let i = 0; i < rows.length; i +=1) {
+                for(let j = 0; j < columns.length; j += 1) {
+                    elRefs[i][j] = createRef()
+                } 
+                console.log(elRefs)
             }
-            return asc
-        }
-        setAscending(createAscArray())
-    },[columns.length]) */
+            return elRefs
+            }
+    }
 
+    const [refTd, setRefTd] = useState(createTdRef())
+
+    // create list items refs
+    useEffect(() => {
+        setRefTd(createTdRef())
+    }, [columns, rows])
 
     /**
      * check if sort by ascending or descending
@@ -31,11 +57,13 @@ const Table = ({columns, rows, id}) => {
      * @returns 
      */
     const checkAscending = (index) => {
+        if(ascending) {
             if(ascending[index]) {
                 return true
             } else {
                 return false
             }
+        }
     }
 
     /**
@@ -52,6 +80,11 @@ const Table = ({columns, rows, id}) => {
         }
     }
     
+    /**
+     * convert date to date string type yyyy-mm-dd
+     * @param {string} date 
+     * @returns 
+     */
     const newDate = (date) => {
         const convertDate = date.split("/").reverse().join("-");
         return convertDate
@@ -65,11 +98,10 @@ const Table = ({columns, rows, id}) => {
     const sortData = (e, index) => {
         e.preventDefault()
         let i, switching, shouldSwitch, x, y, table, ifAscending
-        table = document.getElementById("myTable");
+        table = refTable.current;
         switching = true;
         ifAscending = checkAscending(index)
-        ascending[index] = !ascending[index]
-        console.log(ascending[index])
+        setAscending(ascending.splice(index, 1, !ifAscending))
 
         while (switching) {
             //start by saying: no switching is done:
@@ -105,8 +137,7 @@ const Table = ({columns, rows, id}) => {
                     break;
                 }
                 }
-            } 
-            else {
+            } else {
                 if(isnum) {
                     if(parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
                         shouldSwitch = true;
@@ -126,14 +157,14 @@ const Table = ({columns, rows, id}) => {
                 }
             }
             }
-            if (shouldSwitch && ifAscending) {
-              rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-              switching = true;
-            }
-
-            if (shouldSwitch && !ifAscending) {
-                rows[i+1].parentNode.insertBefore(rows[i],rows[i + 1].nextSibling);
-                switching = true;
+            if (shouldSwitch) {
+                if(ifAscending) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                } else {
+                    rows[i+1].parentNode.insertBefore(rows[i],rows[i + 1].nextSibling);
+                    switching = true;
+                }
             }
           }
     }
@@ -141,7 +172,7 @@ const Table = ({columns, rows, id}) => {
     useEffect(() => {
         const createTableHeads = () => {
             const cols = columns.map((e, index) => 
-            <th key={`${id}-col-${index}`} className={styles.thead} onClick={(e) => sortData(e, index)}>{e.headerName}<Icon aria-label="icon" className={styles.icon} style={ascending[index] ? {transform : ''} : {transform: 'rotate(180deg)'}}/></th>
+            <th key={`${id}-col-${index}`} className={styles.thead} onClick={(e) => sortData(e, index)}>{e.headerName}<Icon aria-label="icon" className={styles.icon} /></th>
             )
             setTableHead(cols)
         } 
@@ -162,21 +193,22 @@ const Table = ({columns, rows, id}) => {
             for(let i= 0; i < rows.length; i+=1) {
                 let tableDetails = []
                 for(let j =0; j< fields.length; j +=1) {
-                    tableDetails= [...tableDetails, <td key={`${id}-td-${i}-${j}`}>{rows[i][fields[j]]? rows[i][fields[j]] : ""}</td>]
+                    console.log(refTd[i][j])
+                    tableDetails= [...tableDetails, <td key={`${id}-td-${i}-${j}`} ref={refTd[i][j]}>{rows[i][fields[j]]? rows[i][fields[j]] : ""}</td>]
                 }
                 tableRows.push(<tr key={`${id}-row-${i}`}>{tableDetails}</tr>)
             }
             settableBody(tableRows)
         }
         createFields()
-        if(fields) {
+        if(fields && refTd && refTd.length > 0) {
             createTableBody() 
         }
-    }, [columns, rows, id])
+    }, [columns, rows, id, refTd])
 
     return (
         <div className={styles.container}>
-        <table className={styles.table} id="myTable">
+        <table className={styles.table} ref={refTable}>
             <thead>
             <tr>
                 {tableHead}
