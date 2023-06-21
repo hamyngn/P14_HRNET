@@ -21,51 +21,6 @@ const Table = ({columns, rows, id}) => {
         setAscending(createAscArray())
     },[columns.length])
 
-    let elRefs = []
-    let refs = []
-    if(rows && rows.length && columns && columns.length) {
-        for(let i = 0; i < rows.length; i +=1) {
-            for(let j = 0; j < columns.length; j += 1) {
-                refs.push(j)
-            }
-            elRefs.push(refs)
-        }
-    }
-
-    const createTdRef = () => {
-        if(rows && rows.length && columns && columns.length) {
-            for(let i = 0; i < rows.length; i +=1) {
-                for(let j = 0; j < columns.length; j += 1) {
-                    elRefs[i][j] = createRef()
-                } 
-                console.log(elRefs)
-            }
-            return elRefs
-            }
-    }
-
-    const [refTd, setRefTd] = useState(createTdRef())
-
-    // create list items refs
-    useEffect(() => {
-        setRefTd(createTdRef())
-    }, [columns, rows])
-
-    /**
-     * check if sort by ascending or descending
-     * @param {number} index 
-     * @returns 
-     */
-    const checkAscending = (index) => {
-        if(ascending) {
-            if(ascending[index]) {
-                return true
-            } else {
-                return false
-            }
-        }
-    }
-
     /**
      * check if string is date format
      * @param {string} date
@@ -91,93 +46,114 @@ const Table = ({columns, rows, id}) => {
     }
 
     /**
-     * handle sort table by columns
-     * @param {event} e 
+     * check if sort by ascending or descending
      * @param {number} index 
+     * @returns 
      */
-    const sortData = (e, index) => {
-        e.preventDefault()
-        let i, switching, shouldSwitch, x, y, table, ifAscending
-        table = refTable.current;
-        switching = true;
-        ifAscending = checkAscending(index)
-        setAscending(ascending.splice(index, 1, !ifAscending))
-
-        while (switching) {
-            //start by saying: no switching is done:
-            switching = false;
-            rows = table.rows;
-            /*Loop through all table rows (except the
-            first, which contains table headers):*/
-            for (i = 1; i < (rows.length - 1); i++) {
-              //start by saying there should be no switching:
-              shouldSwitch = false;
-              /*Get the two elements you want to compare,
-              one from current row and one from the next:*/
-              x = rows[i].getElementsByTagName("TD")[index];
-              y = rows[i + 1].getElementsByTagName("TD")[index];
-              let isnum = /^\d+$/.test(x.innerHTML);
-              let ifDate = isDate(x.innerHTML)
-            //check if the two rows should switch place:
-            if(ifAscending) {
-                if(isnum) {
-                    if(parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
-                        shouldSwitch = true;
-                        break;
-                    }
-                } else if(ifDate) {
-                    if(new Date(newDate(x.innerHTML)).getTime() > new Date(newDate(y.innerHTML)).getTime()) {
-                        shouldSwitch = true;
-                        break;
-                    }
-                }
-                else {
-                    if(x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                    shouldSwitch = true;
-                    break;
-                }
-                }
-            } else {
-                if(isnum) {
-                    if(parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
-                        shouldSwitch = true;
-                        break;
-                    }
-                } else if(ifDate) {
-                    if(new Date(newDate(x.innerHTML)).getTime() < new Date(newDate(y.innerHTML)).getTime()) {
-                        shouldSwitch = true;
-                        break;
-                    }
-                }
-                else {
-                    if(x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                    shouldSwitch = true;
-                    break;
-                }
-                }
-            }
-            }
-            if (shouldSwitch) {
-                if(ifAscending) {
-                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                    switching = true;
+        const checkAscending = (index) => {
+            if(ascending) {
+                if(ascending[index]) {
+                    return true
                 } else {
-                    rows[i+1].parentNode.insertBefore(rows[i],rows[i + 1].nextSibling);
-                    switching = true;
+                    return false
                 }
             }
-          }
-    }
+        }
+        /**
+         * handle sort table by columns
+         * @param {event} e 
+         * @param {number} index 
+         */
+
+        const sortData = (e, index) => {
+            e.preventDefault()
+            let i, shouldSwitch, x, y
+            let table =  refTable.current;
+            let rows = table.rows;
+            let switching = true;
+            let ifAscending = checkAscending(index)
+            let asc = ascending
+            asc[index] = !ifAscending
+            setAscending(asc)
+            if(ifAscending){
+                rows[0].getElementsByTagName('svg')[index].style.transform = 'rotate(180deg)'
+            } else {
+                rows[0].getElementsByTagName('svg')[index].style.transform = ''
+            }
+            while (switching) {
+                //start by saying: no switching is done:
+                switching = false;
+                /*Loop through all table rows (except the
+                first, which contains table headers):*/
+                for (i = 1; i < (rows.length - 1); i++) {
+                  //start by saying there should be no switching:
+                  shouldSwitch = false;
+                  /*Get the two elements you want to compare,
+                  one from current row and one from the next:*/
+                  x = rows[i].getElementsByTagName("TD")[index];
+                  y = rows[i + 1].getElementsByTagName("TD")[index];
+                  let isnum = /^\d+$/.test(x.innerHTML);
+                  let ifDate = isDate(x.innerHTML)
+                //check if the two rows should switch place:
+                if(ifAscending) {
+                    if(isnum) {
+                        if(parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if(ifDate) {
+                        if(new Date(newDate(x.innerHTML)).getTime() > new Date(newDate(y.innerHTML)).getTime()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                    else {
+                        if(x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                    }
+                } else {
+                    if(isnum) {
+                        if(parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if(ifDate) {
+                        if(new Date(newDate(x.innerHTML)).getTime() < new Date(newDate(y.innerHTML)).getTime()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                    else {
+                        if(x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                    }
+                }
+                }
+                if (shouldSwitch) {
+                    if(ifAscending) {
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        switching = true;
+                    } else {
+                        rows[i+1].parentNode.insertBefore(rows[i],rows[i + 1].nextSibling);
+                        switching = true;
+                    }
+                }
+              }
+        }
 
     useEffect(() => {
         const createTableHeads = () => {
             const cols = columns.map((e, index) => 
-            <th key={`${id}-col-${index}`} className={styles.thead} onClick={(e) => sortData(e, index)}>{e.headerName}<Icon aria-label="icon" className={styles.icon} /></th>
+            <th key={`${id}-col-${index}`} className={styles.thead} onClick={(e) => sortData(e, index)}>{e.headerName}<Icon aria-label="icon" className={styles.icon}/></th>
             )
             setTableHead(cols)
         } 
         createTableHeads()
-    }, [columns, id])
+    }, [columns, id, ascending])
 
     useEffect(()=> {
         const createFields = () => {
@@ -193,18 +169,17 @@ const Table = ({columns, rows, id}) => {
             for(let i= 0; i < rows.length; i+=1) {
                 let tableDetails = []
                 for(let j =0; j< fields.length; j +=1) {
-                    console.log(refTd[i][j])
-                    tableDetails= [...tableDetails, <td key={`${id}-td-${i}-${j}`} ref={refTd[i][j]}>{rows[i][fields[j]]? rows[i][fields[j]] : ""}</td>]
+                    tableDetails= [...tableDetails, <td key={`${id}-td-${i}-${j}`}>{rows[i][fields[j]]? rows[i][fields[j]] : ""}</td>]
                 }
                 tableRows.push(<tr key={`${id}-row-${i}`}>{tableDetails}</tr>)
             }
             settableBody(tableRows)
         }
         createFields()
-        if(fields && refTd && refTd.length > 0) {
+        if(fields) {
             createTableBody() 
         }
-    }, [columns, rows, id, refTd])
+    }, [columns, rows, id])
 
     return (
         <div className={styles.container}>
