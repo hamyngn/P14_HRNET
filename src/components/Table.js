@@ -181,8 +181,33 @@ const Table = ({columns, rows, id}) => {
         }
     }, [columns, rows, id])
 
+    const searchByKeyword = (e) => {
+        const table = refTable.current
+        let filter = e.target.value.toLowerCase();
+        let tr = table.getElementsByTagName("tr");
+        for (let i = 0; i < tr.length; i += 1) {
+            for(let j=0; j < tr[i].getElementsByTagName("td").length; j += 1 ) {
+                let td = tr[i].getElementsByTagName("td")[j];
+                if (td) {
+                  let txtValue = td.textContent || td.innerText;
+                  if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    break;
+                  } else {
+                    tr[i].style.display = "none";
+                  }
+                }      
+            }
+        }
+    }
+
     return (
+        <>
+        <div className={styles.input}>
+        <input type="text" id="myInput" onKeyUp={(e) => searchByKeyword(e)} placeholder="Search" title="Type in a keyword" className={styles.input}/>
+        </div>
         <div className={styles.container}>
+        <div className={styles.responsive}>
         <table className={styles.table} ref={refTable}>
             <thead>
             <tr>
@@ -194,6 +219,8 @@ const Table = ({columns, rows, id}) => {
             </tbody>
         </table>
         </div>
+        </div>
+        </>
     )
 }
 
