@@ -1,12 +1,16 @@
-import React, {useEffect, useState, useRef, createRef } from "react"
+import React, {useEffect, useState, useRef } from "react"
 import styles from "../assets/styles/Table.module.css"
 import { ReactComponent as Icon } from '../assets/images/arrow-down-solid.svg';
 
 const Table = ({columns, rows, id}) => {
     const [tableHead, setTableHead] = useState([])
-    const [tableBody, settableBody] = useState([])
+    const [tableBody, setTableBody] = useState([])
     const [fields, setFields] = useState(null)
+    const [page, setPage] = useState(1)
+    const [rowsPerPage, setRowsPerPage] = useState(5)
     const refTable = useRef()
+    const refPre = useRef()
+    const refNext = useRef()
     
     const createAscArray = () => {
         let asc = []
@@ -18,7 +22,8 @@ const Table = ({columns, rows, id}) => {
     const [ascending, setAscending] = useState(createAscArray())
 
     useEffect(() => {
-        setAscending(createAscArray())
+        const asc = createAscArray()
+        setAscending(asc)
     },[columns.length])
 
     /**
@@ -155,7 +160,7 @@ const Table = ({columns, rows, id}) => {
         createTableHeads()
     }, [columns, id, ascending])
 
-    useEffect(()=> {
+    useEffect(() => {
         const createFields = () => {
             let fields = []
             columns.map((e, index) => fields.push(e.field))
@@ -163,7 +168,10 @@ const Table = ({columns, rows, id}) => {
                 setFields(fields)
             }
         }
+        createFields()
+    },[columns])
 
+    useEffect(()=> {
         const createTableBody = () => {
             let tableRows = []
             for(let i= 0; i < rows.length; i+=1) {
@@ -173,18 +181,18 @@ const Table = ({columns, rows, id}) => {
                 }
                 tableRows.push(<tr key={`${id}-row-${i}`}>{tableDetails}</tr>)
             }
-            settableBody(tableRows)
+            setTableBody(tableRows)
         }
-        createFields()
+        
         if(fields) {
-            createTableBody() 
+            createTableBody()
         }
     }, [columns, rows, id])
 
     const searchByKeyword = (e) => {
         const table = refTable.current
         let filter = e.target.value.toLowerCase();
-        let tr = table.getElementsByTagName("tr");
+        let tr = table.rows;
         for (let i = 0; i < tr.length; i += 1) {
             for(let j=0; j < tr[i].getElementsByTagName("td").length; j += 1 ) {
                 let td = tr[i].getElementsByTagName("td")[j];
@@ -199,6 +207,58 @@ const Table = ({columns, rows, id}) => {
                 }      
             }
         }
+    }
+
+    //todo: fix rows shown
+    const displayRows = (page, rowsPerPage) => {
+        const table = refTable.current
+        let tr = table.rows;
+        console.log(page, rowsPerPage)
+        if(page && rowsPerPage && tr) {  
+            for (let i = 1; i < tr.length; i += 1 ) {
+                tr[i].style.display = "none";
+            }
+    
+            if(rowsPerPage === 5) {
+                for (let j = (page - 1) * 5 + 1; j <= page * 5 ; j += 1) {
+                    if(tr[j]) {
+                        console.log(tr[j])
+                        tr[j].style.display = "";
+                    }
+                }
+            }
+    
+            if(rowsPerPage === 10) {
+                for (let j = (page - 1) * 10 + 1; j <= page * 10 ; j += 1) {
+                    if(tr[j]) {
+                        console.log(tr[j])
+                        tr[j].style.display = "";
+                    }
+                }
+            }
+        }
+    }
+
+    useEffect(() => {
+        if(tableBody.length > 0) {
+            displayRows(page, rowsPerPage)
+        }   
+    }, [tableBody, page, rowsPerPage])
+
+    const handleSelect = (e) => {
+        const rows = parseInt(e.target.value)
+        displayRows(1, rows)
+        setRowsPerPage(rows)
+    }
+
+    const showNext = (e) => {
+        displayRows(page+1, rowsPerPage)
+        setPage(page + 1)
+    } 
+
+    const showPrevious = (e) => {
+        displayRows(page-1, rowsPerPage)
+        setPage(page - 1)
     }
 
     return (
@@ -218,6 +278,19 @@ const Table = ({columns, rows, id}) => {
                 {tableBody}
             </tbody>
         </table>
+        <div className={styles.flexRow}>
+            <div>
+            <label htmlFor="rows">Rows per page:</label>
+            <select name="rows" id="rows" onChange={(e) => handleSelect(e)}>
+                <option>5</option>
+                <option>10</option>
+            </select>
+            </div>
+            <div>
+                <span onClick={(e) => showPrevious(e)} className={styles.previous} ref={refPre}>Previous</span>
+                <span onClick={(e) => showNext(e)} className={styles.next} ref={refNext}>Next</span>
+            </div>
+        </div>
         </div>
         </div>
         </>

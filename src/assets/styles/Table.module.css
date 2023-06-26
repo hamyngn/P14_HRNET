@@ -44,3 +44,20 @@ tr:hover {background-color: #F8F7F1;}
 .thead:hover .icon, .thead:focus .icon{
     visibility: visible;
 }
+
+.flexRow {
+    display: flex;
+    margin-top: 1em;
+}
+
+label {
+    margin-right: 1em;
+}
+
+.previous {
+    cursor: pointer;
+}
+
+.next {
+    cursor: pointer;
+}
