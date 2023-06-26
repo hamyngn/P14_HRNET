@@ -1,6 +1,4 @@
 .container {
-    display: flex;
-    justify-content: center;
     overflow-x:auto;
 }
 
@@ -13,6 +11,10 @@ th, td {
     text-align: left;
     padding: 8px;
     border-bottom: 1px solid #ddd;
+}
+
+th {
+    white-space: nowrap;
 }
 
 th:hover {
