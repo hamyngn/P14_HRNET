@@ -45,9 +45,17 @@ tr:hover {background-color: #F8F7F1;}
     visibility: visible;
 }
 
+.pagination {
+    display: flex; 
+    align-items: center;
+    margin-top: 0.5em;
+    justify-content: space-between;
+    float: right
+}
+
 .flexRow {
     display: flex;
-    margin-top: 1em;
+    margin-right: 3em;
 }
 
 label {
@@ -56,8 +64,16 @@ label {
 
 .previous {
     cursor: pointer;
+    margin-right: 1em;
+    pointer-events: none;
+    color: gray
 }
 
 .next {
     cursor: pointer;
+    pointer-events: auto;
+}
+
+span {
+    font-weight: 500;
 }
