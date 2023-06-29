@@ -305,6 +305,8 @@ const Table = ({columns, rows, id}) => {
                 {tableBody}
             </tbody>
         </table>
+        </div>
+        </div>
         <div className={styles.pagination}>
             <div className={styles.flexRow}>
             <label htmlFor="rows">Rows per page:</label>
@@ -313,26 +315,25 @@ const Table = ({columns, rows, id}) => {
                 <option>10</option>
             </select>
             </div>
-            <div>
+            <div className={styles.countElements}>
                 {
                     rowsPerPage <= rows.length && (page * rowsPerPage < rows.length) &&
-                    <span style={{marginRight: '2em'}}>{(page - 1) * rowsPerPage + 1} - {page * rowsPerPage} of {rows.length}</span>
+                    <span>{(page - 1) * rowsPerPage + 1} - {page * rowsPerPage} of {rows.length}</span>
                 }
                 {
                     rowsPerPage <= rows.length && (page * rowsPerPage > rows.length) &&
-                    <span style={{marginRight: '2em'}}>{(page - 1) * rowsPerPage + 1} - {rows.length} of {rows.length}</span>
+                    <span>{(page - 1) * rowsPerPage + 1} - {rows.length} of {rows.length}</span>
                 }
 
                 {
                     rowsPerPage > rows.length &&
-                    <span style={{marginRight: '2em'}}>{(page - 1) * rowsPerPage + 1} - {rows.length} of {rows.length}</span>
+                    <span>{(page - 1) * rowsPerPage + 1} - {rows.length} of {rows.length}</span>
                 }
-                
+            </div>
+            <div>
                 <span onClick={() => showPrevious()} className={styles.previous} ref={refPre}> &lt;&lt; Previous</span>
                 <span onClick={() => showNext()} className={styles.next} ref={refNext}>Next &gt;&gt;</span>
             </div>
-        </div>
-        </div>
         </div>
         </>
     )

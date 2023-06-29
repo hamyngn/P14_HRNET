@@ -67,7 +67,7 @@ const HomePage = () => {
     }
 
 return (
-    <div className={styles.container}>
+    <div className={styles.homePage}>
         <div className={styles.flexColumn}>
             <h1>Create Employee</h1>
             <form action="#" id="create-employee" onSubmit={(e) => saveEmployee(e)}>

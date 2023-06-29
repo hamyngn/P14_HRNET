@@ -42,7 +42,7 @@ const Employee = () => {
 return (
     <>
     <div id="employee-div" className={styles.container}>
-            <h1>Current Employees</h1>
+            <h2>Current Employees</h2>
     </div>
       <Table
         rows={rows}

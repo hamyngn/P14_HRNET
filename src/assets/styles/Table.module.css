@@ -1,7 +1,7 @@
 .input {
     display: flex;
     justify-content: flex-end;
-    margin: 1vw;
+    margin-right: 3em;
 }
 
 .container {
@@ -66,14 +66,61 @@ label {
     cursor: pointer;
     margin-right: 1em;
     pointer-events: none;
-    color: gray
+    color: gray;
+    white-space: nowrap;
 }
 
 .next {
     cursor: pointer;
     pointer-events: auto;
+    white-space: nowrap;
+    margin-right: 3em;
 }
 
 span {
     font-weight: 500;
+}
+
+.countElements {
+    margin-right: 2em;
+}
+
+.countElements span {
+    white-space: nowrap;
+}
+
+@media (max-width: 575px) {
+    table, .pagination {
+        font-size: 12px;
+    }
+
+    .pagination {
+        align-items: center;
+    }
+
+    .input input[type="text"] {
+        font-size: 12px;
+    }
+
+    .pagination label {
+        font-size: 12px;
+        white-space: nowrap;
+        margin-left: 5px;
+    }
+
+    .pagination select {
+        font-size: 12px;
+    }
+
+    .countElements {
+        margin-right: 1em;
+    }
+
+    .flexRow {
+        margin-right: 1em;
+    }
+
+    .next {
+        margin-right: 0;
+    }
 }
