@@ -26,6 +26,9 @@ Input.propTypes = {
     type: PropTypes.string,
     onChange: PropTypes.func,
     required: PropTypes.bool,
-    className:  PropTypes.string
+    className:  PropTypes.string,
+    placeholder: PropTypes.string,
+    onFocus: PropTypes.func,
+    onBlur: PropTypes.func
 }
 export default Input
