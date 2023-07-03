@@ -1,6 +1,7 @@
 import React, {useEffect, useState, useRef } from "react"
 import styles from "../assets/styles/Table.module.css"
 import { ReactComponent as Icon } from '../assets/images/arrow-down-solid.svg';
+import PropTypes from 'prop-types';
 
 const Table = ({columns, rows, id}) => {
     const [tableHead, setTableHead] = useState([])
@@ -11,6 +12,43 @@ const Table = ({columns, rows, id}) => {
     const refTable = useRef()
     const refPre = useRef()
     const refNext = useRef()
+
+        /**
+     * handle number of rows shown per page
+     * @param {number} page 
+     * @param {number} rowsPerPage 
+     */
+        const displayRows = (page, rowsPerPage) => {
+            const table = refTable.current
+            let tr = table.rows;
+            if(page && rowsPerPage && tr) {  
+                for (let i = 1; i < tr.length; i += 1 ) {
+                    tr[i].style.display = "none";
+                }
+        
+                if(rowsPerPage === 5) {
+                    for (let j = (page - 1) * 5 + 1; j <= page * 5 ; j += 1) {
+                        if(tr[j]) {
+                            tr[j].style.display = "";
+                        }
+                    }
+                }
+        
+                if(rowsPerPage === 10) {
+                    for (let j = (page - 1) * 10 + 1; j <= page * 10 ; j += 1) {
+                        if(tr[j]) {
+                            tr[j].style.display = "";
+                        }
+                    }
+                }
+            }
+        }
+    
+        useEffect(() => {
+            if(tableBody.length > 0) {
+                displayRows(page, rowsPerPage)
+            }   
+        }, [tableBody, page, rowsPerPage])
     
     const createAscArray = () => {
         let asc = []
@@ -148,6 +186,7 @@ const Table = ({columns, rows, id}) => {
                     }
                 }
               }
+              displayRows(page, rowsPerPage)
         }
 
     useEffect(() => {
@@ -163,7 +202,7 @@ const Table = ({columns, rows, id}) => {
     useEffect(() => {
         const createFields = () => {
             let fields = []
-            columns.map((e, index) => fields.push(e.field))
+            columns.map((e) => fields.push(e.field))
             if(fields.length > 0) {
                 setFields(fields)
             }
@@ -208,43 +247,6 @@ const Table = ({columns, rows, id}) => {
             }
         }
     }
-
-    /**
-     * handle number of rows shown per page
-     * @param {number} page 
-     * @param {number} rowsPerPage 
-     */
-    const displayRows = (page, rowsPerPage) => {
-        const table = refTable.current
-        let tr = table.rows;
-        if(page && rowsPerPage && tr) {  
-            for (let i = 1; i < tr.length; i += 1 ) {
-                tr[i].style.display = "none";
-            }
-    
-            if(rowsPerPage === 5) {
-                for (let j = (page - 1) * 5 + 1; j <= page * 5 ; j += 1) {
-                    if(tr[j]) {
-                        tr[j].style.display = "";
-                    }
-                }
-            }
-    
-            if(rowsPerPage === 10) {
-                for (let j = (page - 1) * 10 + 1; j <= page * 10 ; j += 1) {
-                    if(tr[j]) {
-                        tr[j].style.display = "";
-                    }
-                }
-            }
-        }
-    }
-
-    useEffect(() => {
-        if(tableBody.length > 0) {
-            displayRows(page, rowsPerPage)
-        }   
-    }, [tableBody, page, rowsPerPage])
 
     /**
      * select number of rows shown per page
@@ -339,4 +341,9 @@ const Table = ({columns, rows, id}) => {
     )
 }
 
+Table.propTypes = {
+    columns: PropTypes.arrayOf(Object),
+    rows: PropTypes.arrayOf(Object),
+    id: PropTypes.string
+}
 export default Table
