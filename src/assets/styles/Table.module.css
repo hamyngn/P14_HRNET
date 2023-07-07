@@ -72,7 +72,6 @@ label {
 
 .next {
     cursor: pointer;
-    pointer-events: auto;
     white-space: nowrap;
     margin-right: 3em;
 }

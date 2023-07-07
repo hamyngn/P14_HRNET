@@ -12,6 +12,7 @@ const Table = ({columns, rows, id}) => {
     const refTable = useRef()
     const refPre = useRef()
     const refNext = useRef()
+    const refSelect = useRef()
 
         /**
      * handle number of rows shown per page
@@ -47,6 +48,7 @@ const Table = ({columns, rows, id}) => {
         useEffect(() => {
             if(tableBody.length > 0) {
                 displayRows(page, rowsPerPage)
+                console.log('hi' + rowsPerPage)
             }   
         }, [tableBody, page, rowsPerPage])
     
@@ -107,7 +109,7 @@ const Table = ({columns, rows, id}) => {
          * @param {event} e 
          * @param {number} index 
          */
-
+//TODO: fix sort 10 rows
         const sortData = (e, index) => {
             e.preventDefault()
             let i, shouldSwitch, x, y
@@ -186,7 +188,8 @@ const Table = ({columns, rows, id}) => {
                     }
                 }
               }
-              displayRows(page, rowsPerPage)
+            setPage(1)
+            displayRows(1, rowsPerPage)
         }
 
     useEffect(() => {
@@ -253,13 +256,13 @@ const Table = ({columns, rows, id}) => {
      * @param {event} e 
      */
     const handleSelect = (e) => {
-        const rows = parseInt(e.target.value)
-        displayRows(1, rows)
-        setRowsPerPage(rows)
+        const val = parseInt(e.target.value)
+        setPage(1)
+        setRowsPerPage(val)
     }
 
     useEffect(() => {
-        if(rowsPerPage > rows.length) {
+        if(rows.length <= rowsPerPage) {
             refNext.current.style.pointerEvents = "none"
             refNext.current.style.color = "gray"
         } else {
@@ -268,26 +271,32 @@ const Table = ({columns, rows, id}) => {
         }
     }, [rowsPerPage, rows.length])
 
+    useEffect(() => {
+        if(page === 1) {
+            refPre.current.style.color = "gray"
+            refPre.current.style.pointerEvents = "none"
+        } 
+        else if(page === Math.ceil(rows.length/rowsPerPage)) {
+            refNext.current.style.pointerEvents = "none"
+            refNext.current.style.color = "gray"
+        } else {
+            refPre.current.style.color = "black"
+            refPre.current.style.pointerEvents = "auto"
+            refNext.current.style.color = "black"
+            refNext.current.style.pointerEvents = "auto"
+        }
+    }, [page])
+
     const showNext = () => {
-        displayRows(page+1, rowsPerPage)
         setPage(page + 1)
         refPre.current.style.color = "black"
         refPre.current.style.pointerEvents = "auto"
-        if(page + 1 === Math.ceil(rows.length/rowsPerPage)) {
-            refNext.current.style.pointerEvents = "none"
-            refNext.current.style.color = "gray"
-        }
     } 
 
     const showPrevious = () => {
-        displayRows(page-1, rowsPerPage)
         setPage(page - 1)
-        refNext.current.style.pointerEvents = "auto"
         refNext.current.style.color = "black"
-        if(page - 1 === 1) {
-            refPre.current.style.color = "gray"
-            refPre.current.style.pointerEvents = "none"
-        }
+        refNext.current.style.pointerEvents = "auto"
     }
 
     return (
@@ -312,7 +321,7 @@ const Table = ({columns, rows, id}) => {
         <div className={styles.pagination}>
             <div className={styles.flexRow}>
             <label htmlFor="rows">Rows per page:</label>
-            <select name="rows" id="rows" onChange={(e) => handleSelect(e)}>
+            <select name="rows" id="rows" onChange={(e) => handleSelect(e)} ref={refSelect}>
                 <option>5</option>
                 <option>10</option>
             </select>
@@ -323,7 +332,7 @@ const Table = ({columns, rows, id}) => {
                     <span>{(page - 1) * rowsPerPage + 1} - {page * rowsPerPage} of {rows.length}</span>
                 }
                 {
-                    rowsPerPage <= rows.length && (page * rowsPerPage > rows.length) &&
+                    rowsPerPage <= rows.length && (page * rowsPerPage >= rows.length) &&
                     <span>{(page - 1) * rowsPerPage + 1} - {rows.length} of {rows.length}</span>
                 }
 
@@ -334,7 +343,13 @@ const Table = ({columns, rows, id}) => {
             </div>
             <div>
                 <span onClick={() => showPrevious()} className={styles.previous} ref={refPre}> &lt;&lt; Previous</span>
-                <span onClick={() => showNext()} className={styles.next} ref={refNext}>Next &gt;&gt;</span>
+                <span onClick={() => showNext()} 
+                className={styles.next} 
+                ref={refNext}
+                style={rows.length <= rowsPerPage ? {pointerEvents:'none', color:'gray'}: {pointerEvents:'auto', color:'black'}}
+                >
+                    Next &gt;&gt;
+                </span>
             </div>
         </div>
         </>
