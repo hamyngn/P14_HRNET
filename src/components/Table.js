@@ -48,7 +48,6 @@ const Table = ({columns, rows, id}) => {
         useEffect(() => {
             if(tableBody.length > 0) {
                 displayRows(page, rowsPerPage)
-                console.log('hi' + rowsPerPage)
             }   
         }, [tableBody, page, rowsPerPage])
     
@@ -109,7 +108,6 @@ const Table = ({columns, rows, id}) => {
          * @param {event} e 
          * @param {number} index 
          */
-//TODO: fix sort 10 rows
         const sortData = (e, index) => {
             e.preventDefault()
             let i, shouldSwitch, x, y
@@ -189,7 +187,12 @@ const Table = ({columns, rows, id}) => {
                 }
               }
             setPage(1)
-            displayRows(1, rowsPerPage)
+            if(refSelect.current.value === "10") {
+                displayRows(1, 10)
+            } else {
+                displayRows(1, 5)
+            }
+             
         }
 
     useEffect(() => {
@@ -275,6 +278,13 @@ const Table = ({columns, rows, id}) => {
         if(page === 1) {
             refPre.current.style.color = "gray"
             refPre.current.style.pointerEvents = "none"
+            if(rows.length <= rowsPerPage) {
+                refNext.current.style.pointerEvents = "none"
+                refNext.current.style.color = "gray"
+            } else {
+                refNext.current.style.pointerEvents = "auto"
+                refNext.current.style.color = "black"
+            }
         } 
         else if(page === Math.ceil(rows.length/rowsPerPage)) {
             refNext.current.style.pointerEvents = "none"
