@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "../assets/styles/HomePage.module.css"
-import SelectCustom from "../components/SelectCustom"
+import SelectCustom from "oc-select-component/src/components/SelectCustom"
 import { useDispatch } from "react-redux";
 import { save } from "../redux/actions/actions";
 import {states} from '../data'
