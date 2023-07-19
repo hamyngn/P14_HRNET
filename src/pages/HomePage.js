@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "../assets/styles/HomePage.module.css"
-import SelectCustom from "oc-select-component/src/components/SelectCustom"
+import SelectCustom from "oc-select-component/dist/components/SelectCustom";
 import { useDispatch } from "react-redux";
 import { save } from "../redux/actions/actions";
 import {states} from '../data'
@@ -9,6 +9,7 @@ import Input from "../components/Input"
 import Modal from "../components/Modal"
 
 const HomePage = () => {
+    
     const [firstName, setFirstName] = useState(null)
     const [lastName, setLastName] = useState(null)
     const [dateOfBirth, setDateOfBirth] = useState(null)
