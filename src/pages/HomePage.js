@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "../assets/styles/HomePage.module.css"
-import SelectCustom from "oc-select-component/dist/components/SelectCustom";
+import SelectCustom from "oc-select-component";
 import { useDispatch } from "react-redux";
 import { save } from "../redux/actions/actions";
 import {states} from '../data'
@@ -128,7 +128,7 @@ return (
                     onChange={(value) => setCity(value)}
                     className={styles.input}
                     />
-                    <SelectCustom id="state" label="State" data={states} value="abbreviation" text="name" onChange={(value) => setState(value)}/>
+                    <SelectCustom id="state" label="State" data={states} value="abbreviation" text="name" onChange={(value) => setState(value)} width={"460px"}/>
                     <Input 
                     label="Zip Code" 
                     id="zip-code"
