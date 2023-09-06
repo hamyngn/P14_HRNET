@@ -13,6 +13,7 @@ const Table = ({columns, rows, id}) => {
     const refPre = useRef()
     const refNext = useRef()
     const refSelect = useRef()
+    const refPagination = useRef()
 
         /**
      * handle number of rows shown per page
@@ -311,8 +312,14 @@ const Table = ({columns, rows, id}) => {
 
     return (
         <>
-        <div className={styles.input}>
-        <input type="text" id="myInput" onKeyUp={(e) => searchByKeyword(e)} placeholder="Search" title="Type in a keyword" className={styles.input}/>
+        <div className={styles.inputContainer}>
+        <input 
+            type="text" 
+            id="myInput" 
+            onKeyUp={(e) => searchByKeyword(e)}
+            placeholder="Search" 
+            title="Type in a keyword" 
+            className={styles.input}/>
         </div>
         <div className={styles.container}>
         <div className={styles.responsive}>
@@ -328,10 +335,10 @@ const Table = ({columns, rows, id}) => {
         </table>
         </div>
         </div>
-        <div className={styles.pagination}>
+        <div className={styles.pagination} ref={refPagination}>
             <div className={styles.flexRow}>
             <label htmlFor="rows">Rows per page:</label>
-            <select name="rows" id="rows" onChange={(e) => handleSelect(e)} ref={refSelect}>
+            <select name="rows" id="rows" onChange={(e) => handleSelect(e)} ref={refSelect} className={styles.selectRows}>
                 <option>5</option>
                 <option>10</option>
             </select>

@@ -128,7 +128,7 @@ return (
                     onChange={(value) => setCity(value)}
                     className={styles.input}
                     />
-                    <SelectCustom id="state" label="State" data={states} value="abbreviation" text="name" onChange={(value) => setState(value)} width={"460px"}/>
+                    <SelectCustom id="state" label="State" data={states} value="abbreviation" text="name" onChange={(value) => setState(value)} width={"100%"} className={styles.select}/>
                     <Input 
                     label="Zip Code" 
                     id="zip-code"
@@ -138,7 +138,7 @@ return (
                     className={styles.input}
                     />
                 </fieldset>
-                <SelectCustom id="department" label="Department" data={departments} value="name" text="name" onChange={(value) => setDepartment(value)}/>
+                <SelectCustom id="department" label="Department" data={departments} value="name" text="name" onChange={(value) => setDepartment(value)} width={"100%"}/>
                 <button type="submit" className={styles.button} style={{marginTop:5}}>Save</button>
             </form>
             </div>

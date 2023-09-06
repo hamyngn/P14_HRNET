@@ -48,13 +48,6 @@ return (
         rows={rows}
         columns={columns}
         id="employees-table"
-/*         initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }} */
-/*         pageSizeOptions={[5, 10]}
-        checkboxSelection */
       />
     </>
 )
