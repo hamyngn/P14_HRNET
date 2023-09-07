@@ -2,6 +2,9 @@ import React, {useEffect, useState, useRef } from "react"
 import styles from "../assets/styles/Table.module.css"
 import { ReactComponent as Icon } from '../assets/images/arrow-down-solid.svg';
 import PropTypes from 'prop-types';
+import {checkIfShouldSwitch, displayRows, displayRowsAfterFilter, checkAscending} from "../utils/utils"
+import { useChangePageTextStyle } from "../hooks/useChangePageTextStyle";
+import { useCreateTableBody } from "../hooks/useCreateTableBody";
 
 const Table = ({columns, rows, id}) => {
     const [tableHead, setTableHead] = useState([])
@@ -9,48 +12,25 @@ const Table = ({columns, rows, id}) => {
     const [fields, setFields] = useState(null)
     const [page, setPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState(5)
+    const [filterElements, setFilterElements] = useState(null)
+    const [countElements, setCountElements] = useState(null)
     const refTable = useRef()
     const refPre = useRef()
     const refNext = useRef()
     const refSelect = useRef()
     const refPagination = useRef()
+    const refInput = useRef()
 
-        /**
-     * handle number of rows shown per page
-     * @param {number} page 
-     * @param {number} rowsPerPage 
-     */
-        const displayRows = (page, rowsPerPage) => {
-            const table = refTable.current
-            let tr = table.rows;
-            if(page && rowsPerPage && tr) {  
-                for (let i = 1; i < tr.length; i += 1 ) {
-                    tr[i].style.display = "none";
-                }
-        
-                if(rowsPerPage === 5) {
-                    for (let j = (page - 1) * 5 + 1; j <= page * 5 ; j += 1) {
-                        if(tr[j]) {
-                            tr[j].style.display = "";
-                        }
-                    }
-                }
-        
-                if(rowsPerPage === 10) {
-                    for (let j = (page - 1) * 10 + 1; j <= page * 10 ; j += 1) {
-                        if(tr[j]) {
-                            tr[j].style.display = "";
-                        }
-                    }
-                }
+    // handle table display by page and rows per page
+    useEffect(() => {
+        if(tableBody.length > 0) {
+            if(filterElements) {
+                displayRowsAfterFilter(page, rowsPerPage, filterElements, refTable)
+            } else {
+                displayRows(page, rowsPerPage, refTable)
             }
         }
-    
-        useEffect(() => {
-            if(tableBody.length > 0) {
-                displayRows(page, rowsPerPage)
-            }   
-        }, [tableBody, page, rowsPerPage])
+    }, [tableBody, page, rowsPerPage, filterElements])
     
     const createAscArray = () => {
         let asc = []
@@ -59,142 +39,13 @@ const Table = ({columns, rows, id}) => {
         }
         return asc
     }
+    // state to track if a column is sorted  by ascending or descending
     const [ascending, setAscending] = useState(createAscArray())
 
     useEffect(() => {
         const asc = createAscArray()
         setAscending(asc)
     },[columns.length])
-
-    /**
-     * check if string is date format
-     * @param {string} date
-     * @returns 
-     */
-    const isDate = (date) => {
-        const date_regex = /^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$/;
-        if(date_regex.test(date)) {
-            return true
-        } else {
-            return false
-        }
-    }
-    
-    /**
-     * convert date to date string type yyyy-mm-dd
-     * @param {string} date 
-     * @returns 
-     */
-    const newDate = (date) => {
-        const convertDate = date.split("/").reverse().join("-");
-        return convertDate
-    }
-
-    /**
-     * check if sort by ascending or descending
-     * @param {number} index 
-     * @returns 
-     */
-        const checkAscending = (index) => {
-            if(ascending) {
-                if(ascending[index]) {
-                    return true
-                } else {
-                    return false
-                }
-            }
-        }
-        /**
-         * handle sort table by columns
-         * @param {event} e 
-         * @param {number} index 
-         */
-        const sortData = (e, index) => {
-            e.preventDefault()
-            let i, shouldSwitch, x, y
-            let table =  refTable.current;
-            let rows = table.rows;
-            let switching = true;
-            let ifAscending = checkAscending(index)
-            let asc = ascending
-            asc[index] = !ifAscending
-            setAscending(asc)
-            if(ifAscending){
-                rows[0].getElementsByTagName('svg')[index].style.transform = 'rotate(180deg)'
-            } else {
-                rows[0].getElementsByTagName('svg')[index].style.transform = ''
-            }
-            while (switching) {
-                //start by saying: no switching is done:
-                switching = false;
-                /*Loop through all table rows (except the
-                first, which contains table headers):*/
-                for (i = 1; i < (rows.length - 1); i++) {
-                  //start by saying there should be no switching:
-                  shouldSwitch = false;
-                  /*Get the two elements you want to compare,
-                  one from current row and one from the next:*/
-                  x = rows[i].getElementsByTagName("TD")[index];
-                  y = rows[i + 1].getElementsByTagName("TD")[index];
-                  let isnum = /^\d+$/.test(x.innerHTML);
-                  let ifDate = isDate(x.innerHTML)
-                //check if the two rows should switch place:
-                if(ifAscending) {
-                    if(isnum) {
-                        if(parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
-                            shouldSwitch = true;
-                            break;
-                        }
-                    } else if(ifDate) {
-                        if(new Date(newDate(x.innerHTML)).getTime() > new Date(newDate(y.innerHTML)).getTime()) {
-                            shouldSwitch = true;
-                            break;
-                        }
-                    }
-                    else {
-                        if(x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                        shouldSwitch = true;
-                        break;
-                    }
-                    }
-                } else {
-                    if(isnum) {
-                        if(parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
-                            shouldSwitch = true;
-                            break;
-                        }
-                    } else if(ifDate) {
-                        if(new Date(newDate(x.innerHTML)).getTime() < new Date(newDate(y.innerHTML)).getTime()) {
-                            shouldSwitch = true;
-                            break;
-                        }
-                    }
-                    else {
-                        if(x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                        shouldSwitch = true;
-                        break;
-                    }
-                    }
-                }
-                }
-                if (shouldSwitch) {
-                    if(ifAscending) {
-                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                        switching = true;
-                    } else {
-                        rows[i+1].parentNode.insertBefore(rows[i],rows[i + 1].nextSibling);
-                        switching = true;
-                    }
-                }
-              }
-            setPage(1)
-            if(refSelect.current.value === "10") {
-                displayRows(1, 10)
-            } else {
-                displayRows(1, 5)
-            }
-             
-        }
 
     useEffect(() => {
         const createTableHeads = () => {
@@ -209,7 +60,7 @@ const Table = ({columns, rows, id}) => {
     useEffect(() => {
         const createFields = () => {
             let fields = []
-            columns.map((e) => fields.push(e.field))
+            columns.map((col) => fields.push(col.field))
             if(fields.length > 0) {
                 setFields(fields)
             }
@@ -217,28 +68,18 @@ const Table = ({columns, rows, id}) => {
         createFields()
     },[columns])
 
-    useEffect(()=> {
-        const createTableBody = () => {
-            let tableRows = []
-            for(let i= 0; i < rows.length; i+=1) {
-                let tableDetails = []
-                for(let j =0; j< fields.length; j +=1) {
-                    tableDetails= [...tableDetails, <td key={`${id}-td-${i}-${j}`}>{rows[i][fields[j]]? rows[i][fields[j]] : ""}</td>]
-                }
-                tableRows.push(<tr key={`${id}-row-${i}`}>{tableDetails}</tr>)
-            }
-            setTableBody(tableRows)
-        }
-        
-        if(fields) {
-            createTableBody()
-        }
-    }, [fields, rows, id])
-
-    const searchByKeyword = (e) => {
+    useCreateTableBody(fields, rows, id, setTableBody, setCountElements)
+    
+    /**
+     * 
+     * @param {string} text 
+     * @returns array of numbers
+     */
+    const searchByKeyword = (text) => {
         const table = refTable.current
-        let filter = e.target.value.toLowerCase();
+        let filter = text.toLowerCase();
         let tr = table.rows;
+        let filteredElements = [];
         for (let i = 0; i < tr.length; i += 1) {
             for(let j=0; j < tr[i].getElementsByTagName("td").length; j += 1 ) {
                 let td = tr[i].getElementsByTagName("td")[j];
@@ -246,11 +87,81 @@ const Table = ({columns, rows, id}) => {
                   let txtValue = td.textContent || td.innerText;
                   if (txtValue.toLowerCase().indexOf(filter) > -1) {
                     tr[i].style.display = "";
+                    filteredElements.push(i)
                     break;
                   } else {
                     tr[i].style.display = "none";
                   }
                 }      
+            }
+        }
+        setPage(1)
+        setFilterElements(filteredElements)
+        setCountElements(filteredElements.length)
+        return filteredElements;
+    }
+
+    /**
+     * handle sort table by columns
+     * @param {event} e 
+     * @param {number} index 
+     */
+    const sortData = (e, index) => {
+        e.preventDefault()
+        let table =  refTable.current;
+        let rows = table.rows;
+        let switching = true;
+        let ifAscending = checkAscending(index, ascending)
+        let asc = ascending
+        asc[index] = !ifAscending
+        setAscending(asc)
+        if(ifAscending){
+            rows[0].getElementsByTagName('svg')[index].style.transform = 'rotate(180deg)'
+        } else {
+            rows[0].getElementsByTagName('svg')[index].style.transform = ''
+        }
+        while (switching) {
+                switching = false;
+                let result = checkIfShouldSwitch(ifAscending, rows, index)
+                let {shouldSwitch} = result
+                let {i} = result
+                if (shouldSwitch) {
+                    if(ifAscending) {
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        switching = true;
+                    } else {
+                        rows[i+1].parentNode.insertBefore(rows[i],rows[i + 1].nextSibling);
+                        switching = true;
+                    }
+                }
+        }
+        setPage(1)
+        let sortedFilterElements = [];
+        let filteredElements = null;
+        if(refInput.current.value !== "") {
+            filteredElements = searchByKeyword(refInput.current.value)
+            if(filteredElements && filteredElements.length !== rows.length) {
+                for(let i = 1; i < rows.length; i += 1) {
+                    for(let j = 0; j < filteredElements.length; j += 1) {
+                        if(rows[i] === rows[filteredElements[j]]){
+                            sortedFilterElements.push(i)
+                        }
+                    }
+                }
+            }
+        }
+        
+        if(refSelect.current.value === "10") {
+            if(filteredElements && filteredElements.length !== rows.length) {
+                displayRowsAfterFilter(1, 10, sortedFilterElements, refTable)
+            } else {
+                displayRows(1, 10, refTable)
+            }
+        } else {
+            if(filteredElements && filteredElements.length !== rows.length) {
+                displayRowsAfterFilter(1, 5, sortedFilterElements, refTable)
+            } else {
+                displayRows(1, 5, refTable)
             }
         }
     }
@@ -265,38 +176,7 @@ const Table = ({columns, rows, id}) => {
         setRowsPerPage(val)
     }
 
-    useEffect(() => {
-        if(rows.length <= rowsPerPage) {
-            refNext.current.style.pointerEvents = "none"
-            refNext.current.style.color = "gray"
-        } else {
-            refNext.current.style.pointerEvents = "auto"
-            refNext.current.style.color = "black"
-        }
-    }, [rowsPerPage, rows.length])
-
-    useEffect(() => {
-        if(page === 1) {
-            refPre.current.style.color = "gray"
-            refPre.current.style.pointerEvents = "none"
-            if(rows.length <= rowsPerPage) {
-                refNext.current.style.pointerEvents = "none"
-                refNext.current.style.color = "gray"
-            } else {
-                refNext.current.style.pointerEvents = "auto"
-                refNext.current.style.color = "black"
-            }
-        } 
-        else if(page === Math.ceil(rows.length/rowsPerPage)) {
-            refNext.current.style.pointerEvents = "none"
-            refNext.current.style.color = "gray"
-        } else {
-            refPre.current.style.color = "black"
-            refPre.current.style.pointerEvents = "auto"
-            refNext.current.style.color = "black"
-            refNext.current.style.pointerEvents = "auto"
-        }
-    }, [page])
+    useChangePageTextStyle(page, refPre, refNext, countElements, rowsPerPage)
 
     const showNext = () => {
         setPage(page + 1)
@@ -314,9 +194,10 @@ const Table = ({columns, rows, id}) => {
         <>
         <div className={styles.inputContainer}>
         <input 
+            ref={refInput}
             type="text" 
             id="myInput" 
-            onKeyUp={(e) => searchByKeyword(e)}
+            onKeyUp={() => searchByKeyword(refInput.current.value)}
             placeholder="Search" 
             title="Type in a keyword" 
             className={styles.input}/>
@@ -345,17 +226,17 @@ const Table = ({columns, rows, id}) => {
             </div>
             <div className={styles.countElements}>
                 {
-                    rowsPerPage <= rows.length && (page * rowsPerPage < rows.length) &&
-                    <span>{(page - 1) * rowsPerPage + 1} - {page * rowsPerPage} of {rows.length}</span>
+                    rowsPerPage <= countElements && (page * rowsPerPage < countElements) &&
+                    <span>{(page - 1) * rowsPerPage + 1} - {page * rowsPerPage} of {countElements}</span>
                 }
                 {
-                    rowsPerPage <= rows.length && (page * rowsPerPage >= rows.length) &&
-                    <span>{(page - 1) * rowsPerPage + 1} - {rows.length} of {rows.length}</span>
+                    rowsPerPage <= countElements && (page * rowsPerPage >= countElements) &&
+                    <span>{(page - 1) * rowsPerPage + 1} - {countElements} of {countElements}</span>
                 }
 
                 {
-                    rowsPerPage > rows.length &&
-                    <span>{(page - 1) * rowsPerPage + 1} - {rows.length} of {rows.length}</span>
+                    rowsPerPage > countElements &&
+                    <span>{(page - 1) * rowsPerPage + 1} - {countElements} of {countElements}</span>
                 }
             </div>
             <div>
